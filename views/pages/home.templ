@@ -1,0 +1,19 @@
+package pages
+
+import "github.com/namishh/holmes/views/layouts"
+
+templ Home(fromProtected bool) {
+	<div class="container">hi</div>
+}
+
+templ HomeIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+) {
+	@layouts.Base(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

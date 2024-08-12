@@ -1,0 +1,20 @@
+package pages
+
+import "github.com/namishh/holmes/views/layouts"
+
+templ Login(fromProtected bool, errors map[string]string) {
+	<section class="">
+	</section>
+}
+
+templ LoginIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+) {
+	@layouts.Base(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

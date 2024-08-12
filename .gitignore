@@ -1,0 +1,9 @@
+bin
+.env
+node_modules
+tmp
+public/*.css
+views/*/*.go
+views/*/*.txt
+.env
+*.db

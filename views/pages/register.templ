@@ -1,0 +1,46 @@
+package pages
+
+import "github.com/namishh/holmes/views/layouts"
+
+templ Register(fromProtected bool, errors map[string]string) {
+	<section style="padding: 2rem; width:50%;">
+	<form method="POST" action="/register">
+  <fieldset>
+    <label>
+      First name
+      <input
+        name="first_name"
+        placeholder="First name"
+        autocomplete="given-name"
+      />
+    </label>
+    <label>
+      Email
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        autocomplete="email"
+      />
+    </label>
+  </fieldset>
+
+  <input
+    type="submit"
+    value="Subscribe"
+  />
+</form>
+	</section>
+}
+
+templ RegisterIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+) {
+	@layouts.Base(title, username, fromProtected, isError) {
+		@cmp
+	}
+}
