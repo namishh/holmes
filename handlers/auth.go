@@ -22,6 +22,9 @@ const user_id_key string = "user_id_key"
 const user_name_key string = "user_name_key"
 const tzone_key string = "tzone_key"
 
+const theme string = "gray"
+const accent string = "blue"
+
 type AuthService interface {
 	CreateUser(u services.User) error
 	CheckEmail(email string) (services.User, error)
@@ -95,7 +98,7 @@ func (ah *AuthHandler) HomeHandler(c echo.Context) error {
 		return errors.New("invalid type for key 'FROMPROTECTED'")
 	}
 	// isError = false
-	homeView := pages.Home(fromProtected)
+	homeView := pages.Home(fromProtected, theme, accent)
 	c.Set("ISERROR", false)
 
 	return renderView(c, pages.HomeIndex(

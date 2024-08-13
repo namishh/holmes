@@ -33,12 +33,12 @@ func GetConnection(dbName string) (*sql.DB, error) {
 }
 
 func CreateMigrations(DBName string, DB *sql.DB) error {
-	stmt := `CREATE TABLE IF NOT EXISTS users (
+	stmt := `CREATE TABLE IF NOT EXISTS teams (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		email VARCHAR(255) NOT NULL,
-    level INT DEFAULT 0,
+    	level INT DEFAULT 0,
 		password VARCHAR(255) NOT NULL,
-		username VARCHAR(255) NOT NULL,
+		name VARCHAR(255) NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 	`
@@ -50,8 +50,8 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 
 	stmt = `CREATE TABLE IF NOT EXISTS question (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-    question TEXT,
-    answer TEXT
+    	question TEXT,
+     	answer TEXT
 	);`
 
 	_, err = DB.Exec(stmt)

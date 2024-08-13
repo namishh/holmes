@@ -35,7 +35,7 @@ func (us *UserService) CreateUser(u User) error {
 	}
 
 	// create user himself
-	stmt := `INSERT INTO teams (email, password, username) VALUES ($1, $2, $3)`
+	stmt := `INSERT INTO teams (email, password, name) VALUES ($1, $2, $3)`
 
 	s, err := us.UserStore.DB.Exec(stmt, u.Email, string(hashedPassword), u.Username)
 
@@ -45,8 +45,8 @@ func (us *UserService) CreateUser(u User) error {
 }
 
 func (us *UserService) CheckUsername(usr string) (User, error) {
-	query := `SELECT id, email, password, username FROM users
-		WHERE username = ?`
+	query := `SELECT id, email, password, username FROM teams
+		WHERE name = ?`
 
 	stmt, err := us.UserStore.DB.Prepare(query)
 	if err != nil {
@@ -72,7 +72,7 @@ func (us *UserService) CheckUsername(usr string) (User, error) {
 }
 
 func (us *UserService) CheckEmail(email string) (User, error) {
-	query := `SELECT id, email, password, username FROM users
+	query := `SELECT id, email, password, name FROM teams
 		WHERE email = ?`
 
 	stmt, err := us.UserStore.DB.Prepare(query)

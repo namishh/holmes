@@ -8,7 +8,7 @@ module.exports = {
       ...colors,
     },
     fontFamily: {
-      sans: ["Raleway"],
+      sans: ["Inter"],
     },
   },
   plugins: [],
