@@ -3,7 +3,17 @@ package pages
 import "github.com/namishh/holmes/views/layouts"
 
 templ Home(fromProtected bool, theme string, mode string) {
-	<div class="sans text-gray-100">hi</div>
+	<div class="h-screen w-screen flex justify-center items-center">
+		<div class="container w-full lg:w-1/2 p-8 lg:p-0 flex flex-col items-center">
+			<p class="bg-gray-800  px-4 lg:px-8 py-2 mb-4 rounded-3xl text-white">this is a <span class="text-blue-400">fully editable</span> template btw.</p>
+			<h1 class="text-center text-2xl lg:text-4xl text-white leading-[2rem] lg:leading-[3rem]">The <span class="text-blue-400">Easy</span>, <span class="text-blue-400">Fast</span> and <span class="text-blue-400">Reliable</span> Starter to Make Cryptic Hunts<br/> Supercharged with <span class="italic text-blue-400 font-bold"><a href="https://go.dev/">Golang.</a></span></h1>
+			<p class="text-lg text-center text-white mt-3">No bullshit, only essentials required starter kit to make your own small cryptic hunt event.<br/>Powered by <a href="https://echo.labstack.com" class="text-blue-400">Echo</a>, <a href="https://templ.guide/" class="text-blue-400">Templ</a> and ol' reliable <span class="text-blue-400">sqlite</span>.</p>
+			<div class="flex mt-6 justify-center gap-6">
+				<a href="https://github.com/namishh/holmes" class="bg-white text-black px-8 py-2 rounded-lg">Code</a>
+				<a href="https://x.com/namishdev" class="bg-blue-400 text-black px-8 py-2 rounded-lg">Follow The Author</a>
+			</div>
+		</div>
+	</div>
 }
 
 templ HomeIndex(

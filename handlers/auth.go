@@ -97,13 +97,23 @@ func (ah *AuthHandler) HomeHandler(c echo.Context) error {
 	if !ok {
 		return errors.New("invalid type for key 'FROMPROTECTED'")
 	}
+	sess, _ := session.Get(auth_sessions_key, c)
 	// isError = false
 	homeView := pages.Home(fromProtected, theme, accent)
 	c.Set("ISERROR", false)
+	if auth, ok := sess.Values[auth_key].(bool); !ok || !auth {
+		return renderView(c, pages.HomeIndex(
+			"Home",
+			"",
+			fromProtected,
+			c.Get("ISERROR").(bool),
+			homeView,
+		))
+	}
 
 	return renderView(c, pages.HomeIndex(
 		"Home",
-		"",
+		sess.Values[user_name_key].(string),
 		fromProtected,
 		c.Get("ISERROR").(bool),
 		homeView,
@@ -128,9 +138,10 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 			tzone = c.Request().Header["X-Timezone"][0]
 		}
 
-		log.Print(tzone)
-
 		user, err := ah.UserServices.CheckEmail(c.FormValue("email"))
+
+		log.Print(user)
+
 		if err != nil {
 			if strings.Contains(err.Error(), "no rows in result set") {
 				c.Set("ISERROR", true)
@@ -175,6 +186,7 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 
 		// Set user as authenticated, their username,
 		// their ID and the client's time zone
+
 		sess.Values = map[interface{}]interface{}{
 			auth_key:      true,
 			user_id_key:   user.ID,

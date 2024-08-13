@@ -7,7 +7,11 @@ templ Navbar(username string, fromProtected bool) {
 	 transition border-[1px] border-gray-800 rounded-lg inline-block px-4 py-1 text-white"
 		>nav</p>
 		<div class="links navc mt-4 w-[15rem] hidden  flex flex-col bg-gray-950 rounded-lg border-2 border-gray-900">
-			<p class="text-white text-sm px-3 py-2 font-bold">{ "@teamcyq" }</p>
+			if username == "" {
+				<p class="text-white text-sm px-3 py-2 font-bold">Not signed in</p>
+			} else {
+				<p class="text-white text-sm px-3 py-2 font-bold">{ username }</p>
+			}
 			<div class="p-[0.6px] bg-gray-800"></div>
 			<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] rounded-lg mt-[2px]" href="/">Home</a>
 			if fromProtected {

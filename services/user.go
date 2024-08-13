@@ -1,8 +1,6 @@
 package services
 
 import (
-	"log"
-
 	"github.com/namishh/holmes/database"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -37,15 +35,12 @@ func (us *UserService) CreateUser(u User) error {
 	// create user himself
 	stmt := `INSERT INTO teams (email, password, name) VALUES ($1, $2, $3)`
 
-	s, err := us.UserStore.DB.Exec(stmt, u.Email, string(hashedPassword), u.Username)
-
-	log.Print(s)
-
+	_, err = us.UserStore.DB.Exec(stmt, u.Email, string(hashedPassword), u.Username)
 	return err
 }
 
 func (us *UserService) CheckUsername(usr string) (User, error) {
-	query := `SELECT id, email, password, username FROM teams
+	query := `SELECT id, email, password, name FROM teams
 		WHERE name = ?`
 
 	stmt, err := us.UserStore.DB.Prepare(query)
