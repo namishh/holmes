@@ -1,9 +1,6 @@
 build-app:
 	@go build -o bin/app ./app/
 
-create:
-	@go run ./app/create.go
-
 css:
 	@tailwind -i ./assets/app.css -o ./public/app.css --watch
 

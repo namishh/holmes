@@ -38,7 +38,7 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 		email VARCHAR(255) NOT NULL,
     	level INT DEFAULT 0,
 		password VARCHAR(255) NOT NULL,
-		name VARCHAR(255) NOT NULL,
+		name VARCHAR(255) UNIQUE NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 	`
@@ -48,10 +48,49 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 		return fmt.Errorf("Failed to create table: %s", err)
 	}
 
-	stmt = `CREATE TABLE IF NOT EXISTS question (
+	stmt = `CREATE TABLE IF NOT EXISTS questions (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
     	question TEXT,
      	answer TEXT
+	);`
+
+	_, err = DB.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("Failed to create table: %s", err)
+	}
+
+	stmt = `CREATE TABLE IF NOT EXISTS images (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    	path TEXT,
+     	description TEXT,
+     	parent_question_id INTEGER,
+     	FOREIGN KEY (parent_question_id) REFERENCES questions(id)
+	);`
+
+	_, err = DB.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("Failed to create table: %s", err)
+	}
+
+	stmt = `CREATE TABLE IF NOT EXISTS audios (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    	path TEXT,
+     	description TEXT,
+     	parent_question_id INTEGER,
+     	FOREIGN KEY(parent_question_id) REFERENCES questions(id)
+	);`
+
+	_, err = DB.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("Failed to create table: %s", err)
+	}
+
+	stmt = `CREATE TABLE IF NOT EXISTS videos (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    	path TEXT,
+     	description TEXT,
+     	parent_question_id INTEGER,
+     	FOREIGN KEY(parent_question_id) REFERENCES questions(id)
 	);`
 
 	_, err = DB.Exec(stmt)

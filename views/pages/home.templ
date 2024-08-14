@@ -2,7 +2,7 @@ package pages
 
 import "github.com/namishh/holmes/views/layouts"
 
-templ Home(fromProtected bool, theme string, mode string) {
+templ Home(fromProtected bool) {
 	<div class="h-screen w-screen flex justify-center items-center">
 		<div class="container w-full lg:w-1/2 p-8 lg:p-0 flex flex-col items-center">
 			<p class="bg-gray-800  px-4 lg:px-8 py-2 mb-4 rounded-3xl text-white">this is a <span class="text-blue-400">fully editable</span> template btw.</p>
@@ -22,6 +22,7 @@ templ HomeIndex(
 	fromProtected bool,
 	isError bool,
 	cmp templ.Component,
+
 ) {
 	@layouts.Base(title, username, fromProtected, isError) {
 		@cmp
