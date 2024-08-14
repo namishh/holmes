@@ -7,3 +7,4 @@ views/*/*.go
 views/*/*.txt
 .env
 *.db
+questions.json
