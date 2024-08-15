@@ -32,7 +32,9 @@ type AuthService interface {
 	CheckEmail(email string) (services.User, error)
 	CheckUsername(usr string) (services.User, error)
 	GetAllUsers() ([]services.User, error)
+	GetAllQuestions() ([]services.Question, error)
 	DeleteTeam(id int) error
+	CreateQuestion(q services.Question, images []string, video []string, audio []string) error
 }
 
 type AuthHandler struct {

@@ -47,8 +47,22 @@ templ PanelHome(fromProtected bool, users []services.User, questions []services.
 							<p class="text-gray-600">No questions yet.</p>
 						</div>
 					} else {
-						<div>
-							Gonna display questions here i guess
+						<div class="grow mt-4 text-white overflow-y-scroll rounded-xl bg-gray-900/40 flex flex-col items-center">
+							for i, qn := range questions {
+								if i % 2 == 0 {
+									<div class="w-full flex justify-between p-3 bg-gray-900/30">
+										<p class="w-1/5">{ qn.Title }</p>
+										<p>{ strconv.Itoa(qn.Points ) } </p>
+										<div class="w-1/5"></div>
+									</div>
+								} else {
+									<div class="w-full flex justify-between p-3 bg-gray-900">
+										<p class="w-1/5">{ qn.Title }</p>
+										<p>{ strconv.Itoa(qn.Points ) } </p>
+										<div class="w-1/5"></div>
+									</div>
+								}
+							}
 						</div>
 					}
 				</div>

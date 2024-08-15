@@ -10,6 +10,7 @@ type User struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Username  string `json:"username"`
+	Points    int    `json:"points"`
 	Level     int    `json:"level"`
 	CreatedAt string `json:"created_at"`
 }
@@ -40,7 +41,7 @@ func (us *UserService) CreateUser(u User) error {
 }
 
 func (us *UserService) CheckUsername(usr string) (User, error) {
-	query := `SELECT id, email, password, name FROM teams
+	query := `SELECT id, email, password, name, points FROM teams
 		WHERE name = ?`
 
 	stmt, err := us.UserStore.DB.Prepare(query)
@@ -58,6 +59,7 @@ func (us *UserService) CheckUsername(usr string) (User, error) {
 		&us.User.Email,
 		&us.User.Password,
 		&us.User.Username,
+		&us.User.Points,
 	)
 	if err != nil {
 		return User{}, err
@@ -94,7 +96,7 @@ func (us *UserService) CheckEmail(email string) (User, error) {
 }
 
 func (us *UserService) GetAllUsers() ([]User, error) {
-	query := `SELECT id, email, level, name FROM teams`
+	query := `SELECT id, email, level, name, points FROM teams`
 	users := make([]User, 0)
 	stmt, err := us.UserStore.DB.Prepare(query)
 	if err != nil {
@@ -110,7 +112,7 @@ func (us *UserService) GetAllUsers() ([]User, error) {
 
 	for rows.Next() {
 		var u User
-		err := rows.Scan(&u.ID, &u.Email, &u.Level, &u.Username)
+		err := rows.Scan(&u.ID, &u.Email, &u.Level, &u.Username, &u.Points)
 		if err != nil {
 			return users, err
 		}

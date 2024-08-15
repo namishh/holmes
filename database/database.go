@@ -37,6 +37,7 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		email VARCHAR(255) NOT NULL,
     	level INT DEFAULT 0,
+    	points INT DEFAULT 0,
 		password VARCHAR(255) NOT NULL,
 		name VARCHAR(255) UNIQUE NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -53,8 +54,7 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
     	question TEXT,
      	answer TEXT,
       	title TEXT,
-       	points INT,
-        difficulty TEXT
+       	points INT
 	);`
 
 	_, err = DB.Exec(stmt)

@@ -4,8 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
@@ -136,6 +139,11 @@ func (ah *AuthHandler) AdminPageHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Error fetching users")
 	}
 
+	questions, err = ah.UserServices.GetAllQuestions()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error fetching questions")
+	}
+
 	adminLoginView := panel.PanelHome(fromProtected, users, questions)
 	c.Set("ISERROR", false)
 	return renderView(c, panel.PanelIndex(
@@ -145,6 +153,32 @@ func (ah *AuthHandler) AdminPageHandler(c echo.Context) error {
 		c.Get("ISERROR").(bool),
 		adminLoginView,
 	))
+}
+
+func MakeArray(label string, form *multipart.Form, short string) (list []string, err error) {
+	files := form.File[label]
+	for _, file := range files {
+		src, err := file.Open()
+		if err != nil {
+			return list, err
+		}
+		defer src.Close()
+		u := uuid.New().String()
+		filename := fmt.Sprintf("./public/%s-%s", short, u)
+		finalurl := fmt.Sprintf("/static/%s-%s", short, u)
+		list = append(list, finalurl)
+		dst, err := os.Create(filename)
+		if err != nil {
+			return list, err
+		}
+		defer dst.Close()
+		if _, err = io.Copy(dst, src); err != nil {
+			return list, err
+		}
+	}
+
+	return list, err
+
 }
 
 func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
@@ -162,16 +196,23 @@ func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 			errs["title"] = "Title cannot be empty"
 		}
 
-		desc := c.FormValue("desc")
-		if len(desc) == 0 {
-			c.Set("ISERROR", true)
-			errs["desc"] = "Description cannot be empty"
-		}
-
 		question := c.FormValue("question")
 		if len(question) == 0 {
 			c.Set("ISERROR", true)
 			errs["question"] = "Question cannot be empty"
+		}
+
+		answer := c.FormValue("answer")
+		if len(question) == 0 {
+			c.Set("ISERROR", true)
+			errs["answer"] = "Answer cannot be empty"
+		}
+
+		points := c.FormValue("points")
+		i, err := strconv.Atoi(points)
+		if err != nil || i == 0 {
+			c.Set("ISERROR", true)
+			errs["points"] = "Points cannot be empty"
 		}
 
 		if len(errs) > 0 {
@@ -191,31 +232,20 @@ func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 		if err != nil {
 			return err
 		}
-
-		files := form.File["images"]
-
-		for _, file := range files {
-			// Source
-			src, err := file.Open()
-			if err != nil {
-				return err
-			}
-			defer src.Close()
-
-			// Destination
-			filename := fmt.Sprintf("./public/IMG-%s", uuid.New().String())
-			dst, err := os.Create(filename)
-			if err != nil {
-				return err
-			}
-			defer dst.Close()
-
-			// Copy
-			if _, err = io.Copy(dst, src); err != nil {
-				return err
-			}
-
+		images, err := MakeArray("images", form, "IMG")
+		if err != nil {
+			return err
 		}
+		videos, err := MakeArray("videos", form, "VID")
+		if err != nil {
+			return err
+		}
+		audios, err := MakeArray("audios", form, "AUD")
+		if err != nil {
+			return err
+		}
+		log.Println(images, videos, audios)
+		err = ah.UserServices.CreateQuestion(services.Question{Question: question, Title: title, Points: i, Answer: answer}, images, videos, audios)
 		return c.Redirect(http.StatusSeeOther, "/su")
 	}
 
