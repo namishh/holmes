@@ -53,13 +53,27 @@ templ PanelHome(fromProtected bool, users []services.User, questions []services.
 									<div class="w-full flex justify-between p-3 bg-gray-900/30">
 										<p class="w-1/5">{ qn.Title }</p>
 										<p>{ strconv.Itoa(qn.Points ) } </p>
-										<div class="w-1/5"></div>
+										<div class="w-1/5 flex justify-end gap-2">
+											<a href={ templ.URL(fmt.Sprintf("/su/deletequestion/%d", qn.ID)) }>
+												<img src="/static/trash.svg" class="h-6"/>
+											</a>
+											<a href={ templ.URL(fmt.Sprintf("/su/editquestion/%d", qn.ID)) }>
+												<img src="/static/edit.svg" class="h-6"/>
+											</a>
+										</div>
 									</div>
 								} else {
 									<div class="w-full flex justify-between p-3 bg-gray-900">
 										<p class="w-1/5">{ qn.Title }</p>
 										<p>{ strconv.Itoa(qn.Points ) } </p>
-										<div class="w-1/5"></div>
+										<div class="w-1/5 flex justify-end gap-2">
+											<a href={ templ.URL(fmt.Sprintf("/su/deletequestion/%d", qn.ID)) }>
+												<img src="/static/trash.svg" class="h-6"/>
+											</a>
+											<a href={ templ.URL(fmt.Sprintf("/su/editquestion/%d", qn.ID)) }>
+												<img src="/static/edit.svg" class="h-6"/>
+											</a>
+										</div>
 									</div>
 								}
 							}

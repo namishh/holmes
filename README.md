@@ -8,7 +8,7 @@
 - [ ] Admin
   - [x] Delete User
   - [x] Add Question
-  - [ ] Delete Question
+  - [x] Delete Question
   - [ ] Edit Question
   - [ ] Hints
 - [ ] Game flow
@@ -18,5 +18,5 @@
   - [ ] Get Score
 - [ ] Leaderboard
 - [ ] Host on digital ocean
-- [ ] Extra 
+- [ ] Extra
   - [ ] Complete the home page

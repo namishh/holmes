@@ -34,6 +34,7 @@ type AuthService interface {
 	GetAllUsers() ([]services.User, error)
 	GetAllQuestions() ([]services.Question, error)
 	DeleteTeam(id int) error
+	DeleteQuestion(id int) error
 	CreateQuestion(q services.Question, images []string, video []string, audio []string) error
 }
 
@@ -348,6 +349,24 @@ func (ah *AuthHandler) AdminDeleteTeam(c echo.Context) error {
 	}
 
 	ah.UserServices.DeleteTeam(ti)
+
+	return c.Redirect(http.StatusSeeOther, "/su")
+}
+
+func (ah *AuthHandler) AdminDeleteQuestion(c echo.Context) error {
+	qid := c.Param("id")
+	ti, err := strconv.Atoi(qid)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+
+	}
+
+	ah.UserServices.DeleteQuestion(ti)
 
 	return c.Redirect(http.StatusSeeOther, "/su")
 }

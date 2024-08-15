@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"log"
 
 	"golang.org/x/crypto/bcrypt"
@@ -109,4 +110,36 @@ func (us *UserService) GetAllQuestions() ([]Question, error) {
 	}
 
 	return questions, nil
+}
+
+func (us *UserService) DeleteQuestion(id int) error {
+	query := `DELETE FROM questions WHERE id = ?`
+	stmt, err := us.UserStore.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	stmt.Exec(id)
+
+	c := make([]string, 3)
+	c[0] = "images"
+	c[1] = "audios"
+	c[2] = "videos"
+
+	for _, table := range c {
+		query = fmt.Sprintf(`DELETE FROM %s  WHERE parent_question_id = ?`, table)
+		stmt, err = us.UserStore.DB.Prepare(query)
+		if err != nil {
+			return err
+		}
+
+		defer stmt.Close()
+
+		stmt.Exec(id)
+
+	}
+
+	return nil
 }
