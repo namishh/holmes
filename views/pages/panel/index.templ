@@ -1,0 +1,22 @@
+package panel
+
+import "github.com/namishh/holmes/views/layouts"
+
+templ PanelHome(fromProtected bool) {
+	<div class="h-screen w-screen flex justify-center items-center">
+		admin panel
+	</div>
+}
+
+templ PanelIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+
+) {
+	@layouts.Base(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

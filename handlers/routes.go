@@ -14,8 +14,11 @@ func SetupRoutes(e *echo.Echo, ah *AuthHandler) {
 	e.GET("/login", ah.flagsMiddleware(ah.LoginHandler))
 	e.POST("/login", ah.flagsMiddleware(ah.LoginHandler))
 
-	e.GET("/admin", ah.flagsMiddleware(ah.AdminHandler))
-	e.POST("/admin", ah.flagsMiddleware(ah.AdminHandler))
+	e.GET("/sudo", ah.flagsMiddleware(ah.AdminHandler))
+	e.POST("/sudo", ah.flagsMiddleware(ah.AdminHandler))
 
 	e.GET("/logout", ah.flagsMiddleware(ah.LogoutHandler))
+
+	protectedGroup := e.Group("/su", ah.adminMiddleware)
+	protectedGroup.GET("", ah.AdminPageHandler)
 }

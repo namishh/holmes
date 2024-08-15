@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"net/mail"
-	"os"
 	"strings"
 
 	"github.com/a-h/templ"
@@ -95,78 +94,6 @@ func (ah *AuthHandler) authMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 func valid(email string) bool {
 	_, err := mail.ParseAddress(email)
 	return err == nil
-}
-
-func (ah *AuthHandler) AdminHandler(c echo.Context) error {
-
-	sess, _ := session.Get(auth_sessions_key, c)
-	log.Println(sess.Values[user_type])
-	if sess.Values[user_type] == "admin" {
-		return c.Redirect(http.StatusSeeOther, "/register")
-	}
-
-	errs := make(map[string]string)
-	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
-	if !ok {
-		return errors.New("invalid type for key 'FROMPROTECTED'")
-	}
-
-	if c.Request().Method == "POST" {
-
-		if c.FormValue("password") != os.Getenv("ADMIN_PASS") {
-			c.Set("ISERROR", true)
-			errs["pass"] = "Incorrect Password"
-
-			adminLoginView := pages.AdminLogin(fromProtected, errs)
-			c.Set("ISERROR", false)
-			return renderView(c, pages.AdminLoginIndex(
-				"Admin Panel",
-				"",
-				fromProtected,
-				c.Get("ISERROR").(bool),
-				adminLoginView,
-			))
-		} else {
-			tzone := ""
-			if len(c.Request().Header["X-Timezone"]) != 0 {
-				tzone = c.Request().Header["X-Timezone"][0]
-			}
-
-			sess, _ := session.Get(auth_sessions_key, c)
-			sess.Options = &sessions.Options{
-				Path:     "/",
-				MaxAge:   60 * 60 * 24 * 7, // 1 week
-				HttpOnly: true,
-			}
-
-			// Set user as authenticated, their username,
-			// their ID and the client's time zone
-
-			sess.Values = map[interface{}]interface{}{
-				auth_key:      true,
-				user_type:     "admin",
-				user_id_key:   9999999,
-				user_name_key: "admin",
-				tzone_key:     tzone,
-			}
-			sess.Save(c.Request(), c.Response())
-
-			return c.Redirect(http.StatusSeeOther, "/")
-		}
-
-	}
-
-	//sess, _ := session.Get(auth_sessions_key, c)
-	// isError = false
-	adminLoginView := pages.AdminLogin(fromProtected, errs)
-	c.Set("ISERROR", false)
-	return renderView(c, pages.AdminLoginIndex(
-		"Admin Panel",
-		"",
-		fromProtected,
-		c.Get("ISERROR").(bool),
-		adminLoginView,
-	))
 }
 
 func (ah *AuthHandler) HomeHandler(c echo.Context) error {
@@ -389,6 +316,7 @@ func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
 	sess.Values = map[interface{}]interface{}{
 		auth_key:      false,
 		user_id_key:   "",
+		user_type:     "none",
 		user_name_key: "",
 		tzone_key:     "",
 	}

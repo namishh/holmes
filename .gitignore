@@ -3,8 +3,8 @@ bin
 node_modules
 tmp
 public/*.css
-views/*/*.go
-views/*/*.txt
+views/**/*.go
+views/**/*.txt
 .env
 *.db
 questions.json

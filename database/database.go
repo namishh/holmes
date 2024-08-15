@@ -51,7 +51,10 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 	stmt = `CREATE TABLE IF NOT EXISTS questions (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
     	question TEXT,
-     	answer TEXT
+     	answer TEXT,
+      	title TEXT,
+       	points INT,
+        difficulty INT
 	);`
 
 	_, err = DB.Exec(stmt)
