@@ -65,7 +65,6 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 	stmt = `CREATE TABLE IF NOT EXISTS images (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
     	path TEXT,
-     	description TEXT,
      	parent_question_id INTEGER,
      	FOREIGN KEY (parent_question_id) REFERENCES questions(id)
 	);`
@@ -78,7 +77,6 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 	stmt = `CREATE TABLE IF NOT EXISTS audios (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
     	path TEXT,
-     	description TEXT,
      	parent_question_id INTEGER,
      	FOREIGN KEY(parent_question_id) REFERENCES questions(id)
 	);`
@@ -91,7 +89,6 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 	stmt = `CREATE TABLE IF NOT EXISTS videos (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
     	path TEXT,
-     	description TEXT,
      	parent_question_id INTEGER,
      	FOREIGN KEY(parent_question_id) REFERENCES questions(id)
 	);`

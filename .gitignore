@@ -7,4 +7,7 @@ views/**/*.go
 views/**/*.txt
 .env
 *.db
+public/IMG-*
+public/VID-*
+public/AUD-*
 questions.json

@@ -2,9 +2,12 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -136,6 +139,89 @@ func (ah *AuthHandler) AdminPageHandler(c echo.Context) error {
 	adminLoginView := panel.PanelHome(fromProtected, users, questions)
 	c.Set("ISERROR", false)
 	return renderView(c, panel.PanelIndex(
+		"Admin Panel",
+		"admin",
+		fromProtected,
+		c.Get("ISERROR").(bool),
+		adminLoginView,
+	))
+}
+
+func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
+	errs := make(map[string]string)
+	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
+	if !ok {
+		return errors.New("invalid type for key 'FROMPROTECTED'")
+	}
+
+	if c.Request().Method == "POST" {
+		title := c.FormValue("title")
+
+		if len(title) == 0 {
+			c.Set("ISERROR", true)
+			errs["title"] = "Title cannot be empty"
+		}
+
+		desc := c.FormValue("desc")
+		if len(desc) == 0 {
+			c.Set("ISERROR", true)
+			errs["desc"] = "Description cannot be empty"
+		}
+
+		question := c.FormValue("question")
+		if len(question) == 0 {
+			c.Set("ISERROR", true)
+			errs["question"] = "Question cannot be empty"
+		}
+
+		if len(errs) > 0 {
+			questionView := panel.PanelQuestion(fromProtected, errs)
+			c.Set("ISERROR", false)
+			return renderView(c, panel.PanelQuestionIndex(
+				"Admin Panel",
+				"admin",
+				fromProtected,
+				c.Get("ISERROR").(bool),
+				questionView,
+			))
+		}
+
+		// create the question
+		form, err := c.MultipartForm()
+		if err != nil {
+			return err
+		}
+
+		files := form.File["images"]
+
+		for _, file := range files {
+			// Source
+			src, err := file.Open()
+			if err != nil {
+				return err
+			}
+			defer src.Close()
+
+			// Destination
+			filename := fmt.Sprintf("./public/IMG-%s", uuid.New().String())
+			dst, err := os.Create(filename)
+			if err != nil {
+				return err
+			}
+			defer dst.Close()
+
+			// Copy
+			if _, err = io.Copy(dst, src); err != nil {
+				return err
+			}
+
+		}
+		return c.Redirect(http.StatusSeeOther, "/su")
+	}
+
+	adminLoginView := panel.PanelQuestion(fromProtected, errs)
+	c.Set("ISERROR", false)
+	return renderView(c, panel.PanelQuestionIndex(
 		"Admin Panel",
 		"admin",
 		fromProtected,
