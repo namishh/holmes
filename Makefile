@@ -1,20 +1,16 @@
-build-app:
+build:
+	@npx tailwind -i ./assets/app.css -o ./public/app.css
+	@templ generate
 	@go build -o bin/app ./app/
 
 css:
-	@tailwind -i ./assets/app.css -o ./public/app.css --watch
-
-gen-css:
-	@tailwind -i ./assets/app.css -o ./public/app.css
+	@npx tailwind -i ./assets/app.css -o ./public/app.css --watch
 
 run: build-app
 	@./bin/app
 
 templ:
 	@templ generate --watch
-
-gen-templ:
-	@templ generate
 
 dev:
 	@./bin/air

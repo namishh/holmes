@@ -1,0 +1,15 @@
+{
+  "name": "holmes",
+  "version": "1.0.0",
+  "description": "![header](https://i.imgur.com/Gumf8Kz.png)",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.10"
+  }
+}
