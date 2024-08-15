@@ -1,10 +1,90 @@
 package panel
 
-import "github.com/namishh/holmes/views/layouts"
+import (
+	"fmt"
+	"github.com/namishh/holmes/services"
+	"github.com/namishh/holmes/views/layouts"
+	"strconv"
+)
 
-templ PanelHome(fromProtected bool) {
-	<div class="h-screen w-screen flex justify-center items-center">
-		admin panel
+templ PanelHome(fromProtected bool, users []services.User, questions []services.Question) {
+	<div class="min-h-screen w-screen flex flex-col p-8">
+		<h1 class="md:px-6 md:mb-6 text-white font-bold text-xl">Dashboard</h1>
+		<div class="flex w-full flex-wrap">
+			<div class="w-full md:w-1/2 md:py-0 py-6 md:px-6">
+				<div class="p-8 bg-gray-900/50 border-[1px] border-gray-700 rounded-md w-full flex flex-col justify-center">
+					<div class="w-full flex justify-between items-center">
+						<h1 class="text-xl md:text-2xl text-white">Questions</h1>
+						<img src="/static/notebook.svg" class="h-6"/>
+					</div>
+					<div class="w-full mt-4 flex justify-end items-center">
+						<h1 class="text-4xl text-white">{ strconv.Itoa(len(questions)) }</h1>
+					</div>
+				</div>
+			</div>
+			<div class="w-full md:w-1/2 py-6 md:py-0 md:px-6">
+				<div class="p-8 bg-gray-900/50 border-[1px] border-gray-700 rounded-md w-full flex flex-col justify-center">
+					<div class="w-full flex justify-between items-center">
+						<h1 class="text-xl md:text-2xl text-white">Participants</h1>
+						<img src="/static/user.svg" class="h-6"/>
+					</div>
+					<div class="w-full mt-4 flex justify-end items-center">
+						<h1 class="text-4xl text-white">{ strconv.Itoa(len(users)) }</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<h1 class="md:px-6 md:my-6 text-white font-bold text-xl">Management</h1>
+		<div class="flex w-full flex-wrap">
+			<div class="w-full md:w-1/2 md:py-0 py-6 md:px-6">
+				<div class="p-3 md:p-8 bg-gray-900/50 min-h-[25rem] max-h-[31rem] border-[1px] border-gray-700 rounded-md w-full flex flex-col">
+					<div class="w-full flex justify-between items-center">
+						<h1 class="text-xl  text-white">Questions</h1>
+						<a class="text-sm py-2 px-4 bg-blue-400 rounded-xl border-2 border-gray-700" href="/su/questions/add">Add Question</a>
+					</div>
+					if len(questions) < 1 {
+						<div class="grow mt-4 rounded-xl bg-gray-900 flex justify-center items-center">
+							<p class="text-gray-600">No questions yet.</p>
+						</div>
+					} else {
+						<div>
+							Gonna display questions here i guess
+						</div>
+					}
+				</div>
+			</div>
+			<div class="w-full md:w-1/2 py-6 md:py-0 md:px-6">
+				<div class="p-3 md:p-8  bg-gray-900/50 border-[1px] min-h-[25rem] max-h-[31rem]  border-gray-700 rounded-md w-full flex flex-col justify-center">
+					<div class="w-full flex justify-between items-center">
+						<h1 class="text-xl  text-white">Participants</h1>
+						<img src="/static/user.svg" class="h-6"/>
+					</div>
+					if len(users) < 1 {
+						<div class="grow mt-4 rounded-xl bg-gray-900 flex justify-center items-center">
+							<p class="text-gray-600">No users.</p>
+						</div>
+					} else {
+						<div class="grow mt-4 text-white overflow-y-scroll rounded-xl bg-gray-900/40 flex flex-col items-center">
+							for i, team := range users {
+								if i % 2 == 0 {
+									<div class="w-full flex justify-between p-3 bg-gray-900/30">
+										<p class="w-1/5">{ team.Username }</p>
+										<p>{ strconv.Itoa(team.Level * 1000) } </p>
+										<a href={ templ.URL(fmt.Sprintf("/su/deleteteam/%d", team.ID)) } class="bg-red-600 px-3 py-1 rounded-md text-white">Delete</a>
+									</div>
+								} else {
+									<div class="w-full flex justify-between p-3 bg-gray-900">
+										<p class="w-1/5">{ team.Username }</p>
+										<p>{ strconv.Itoa(team.Level * 1000) } </p>
+										<a href={ templ.URL(fmt.Sprintf("/su/deleteteam/%d", team.ID)) } class="bg-red-600 px-3 py-1 rounded-md text-white">Delete</a>
+									</div>
+								}
+							}
+						</div>
+					}
+				</div>
+			</div>
+		</div>
 	</div>
 }
 
@@ -16,7 +96,7 @@ templ PanelIndex(
 	cmp templ.Component,
 
 ) {
-	@layouts.Base(title, username, fromProtected, isError) {
+	@layouts.AdminBase(title, username, fromProtected, isError) {
 		@cmp
 	}
 }

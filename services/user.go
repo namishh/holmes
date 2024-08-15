@@ -92,3 +92,45 @@ func (us *UserService) CheckEmail(email string) (User, error) {
 
 	return us.User, nil
 }
+
+func (us *UserService) GetAllUsers() ([]User, error) {
+	query := `SELECT id, email, level, name FROM teams`
+	users := make([]User, 0)
+	stmt, err := us.UserStore.DB.Prepare(query)
+	if err != nil {
+		return users, err
+	}
+
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return users, err
+	}
+
+	for rows.Next() {
+		var u User
+		err := rows.Scan(&u.ID, &u.Email, &u.Level, &u.Username)
+		if err != nil {
+			return users, err
+		}
+
+		users = append(users, u)
+	}
+
+	return users, nil
+}
+
+func (us *UserService) DeleteTeam(id int) error {
+	query := `DELETE FROM teams WHERE id = ?`
+	stmt, err := us.UserStore.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	stmt.Exec(id)
+
+	return nil
+}

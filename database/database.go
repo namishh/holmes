@@ -54,7 +54,7 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
      	answer TEXT,
       	title TEXT,
        	points INT,
-        difficulty INT
+        difficulty TEXT
 	);`
 
 	_, err = DB.Exec(stmt)

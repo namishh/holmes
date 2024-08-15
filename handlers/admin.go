@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/pages"
 	"github.com/namishh/holmes/views/pages/panel"
 )
@@ -100,7 +101,7 @@ func (ah *AuthHandler) AdminHandler(c echo.Context) error {
 			}
 			sess.Save(c.Request(), c.Response())
 
-			return c.Redirect(http.StatusSeeOther, "/")
+			return c.Redirect(http.StatusSeeOther, "/su")
 		}
 
 	}
@@ -124,7 +125,15 @@ func (ah *AuthHandler) AdminPageHandler(c echo.Context) error {
 		return errors.New("invalid type for key 'FROMPROTECTED'")
 	}
 
-	adminLoginView := panel.PanelHome(fromProtected)
+	users := make([]services.User, 0)
+	questions := make([]services.Question, 0)
+
+	users, err := ah.UserServices.GetAllUsers()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error fetching users")
+	}
+
+	adminLoginView := panel.PanelHome(fromProtected, users, questions)
 	c.Set("ISERROR", false)
 	return renderView(c, panel.PanelIndex(
 		"Admin Panel",

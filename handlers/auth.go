@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"net/mail"
+	"strconv"
 	"strings"
 
 	"github.com/a-h/templ"
@@ -29,6 +31,8 @@ type AuthService interface {
 	CreateUser(u services.User) error
 	CheckEmail(email string) (services.User, error)
 	CheckUsername(usr string) (services.User, error)
+	GetAllUsers() ([]services.User, error)
+	DeleteTeam(id int) error
 }
 
 type AuthHandler struct {
@@ -241,7 +245,7 @@ func (ah *AuthHandler) RegisterHandler(c echo.Context) error {
 		}
 
 		_, err := ah.UserServices.CheckEmail(email)
-		if err == nil {
+		if err == nil || username == "admin" {
 			errs["email"] = "Account with this email already exists"
 			c.Set("ISERROR", true)
 		}
@@ -326,4 +330,22 @@ func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
 	c.Set("FROMPROTECTED", false)
 
 	return c.Redirect(http.StatusSeeOther, "/login")
+}
+
+func (ah *AuthHandler) AdminDeleteTeam(c echo.Context) error {
+	teamID := c.Param("id")
+	ti, err := strconv.Atoi(teamID)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+
+	}
+
+	ah.UserServices.DeleteTeam(ti)
+
+	return c.Redirect(http.StatusSeeOther, "/su")
 }
