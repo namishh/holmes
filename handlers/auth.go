@@ -31,11 +31,18 @@ type AuthService interface {
 	CreateUser(u services.User) error
 	CheckEmail(email string) (services.User, error)
 	CheckUsername(usr string) (services.User, error)
+
 	GetAllUsers() ([]services.User, error)
-	GetAllQuestions() ([]services.Question, error)
 	DeleteTeam(id int) error
+
+	GetAllQuestions() ([]services.Question, error)
 	DeleteQuestion(id int) error
 	CreateQuestion(q services.Question, images []string, video []string, audio []string) error
+	GetQuestionById(id int) (services.Question, error)
+
+	GetHints() ([]services.Hint, error)
+	CreateHint(h services.Hint) error
+	DeleteHint(id int) error
 }
 
 type AuthHandler struct {
@@ -369,4 +376,22 @@ func (ah *AuthHandler) AdminDeleteQuestion(c echo.Context) error {
 	ah.UserServices.DeleteQuestion(ti)
 
 	return c.Redirect(http.StatusSeeOther, "/su")
+}
+
+func (ah *AuthHandler) AdminDeleteHint(c echo.Context) error {
+	qid := c.Param("id")
+	ti, err := strconv.Atoi(qid)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+
+	}
+
+	ah.UserServices.DeleteHint(ti)
+
+	return c.Redirect(http.StatusSeeOther, "/su/hints")
 }

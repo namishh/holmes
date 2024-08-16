@@ -1,0 +1,51 @@
+package panel
+
+import "github.com/namishh/holmes/views/layouts"
+
+templ PanelNewHint(fromProtected bool, errors map[string]string) {
+	<div class="h-screen w-screen gap-4 flex justify-center items-center text-white flex-col p-8">
+		<form method="POST" action="" class="xl:w-1/2 lg:w-2/3 flex flex-col w-full p-4 bg-gray-900 rounded-xl">
+			<div class="flex justify-between items-center">
+				<div class="flex items-center gap-2">
+					<img src="/static/hints.svg" class="h-6"/>
+					<h1 class="text-2xl font-bold">Create A New Hint </h1>
+				</div>
+				<button type="submit" class="px-6 py-2 bg-blue-400 text-black rounded-lg">Submit</button>
+			</div>
+			<div class="flex flex-col my-4 gap-2">
+				<label for="title">Enter the hint</label>
+				<input id="title" placeholder="New Hint" name="title" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+				if errors["title"] != "" {
+					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["title"] }</p>
+				}
+			</div>
+			<div class="flex flex-col my-4 gap-2">
+				<label for="level">Enter a Valid Level ID</label>
+				<input id="level" placeholder="1" type="number" name="level" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+				if errors["level"] != "" {
+					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["level"] }</p>
+				}
+			</div>
+			<div class="flex flex-col my-4 gap-2">
+				<label for="level">Worth</label>
+				<input id="worth" placeholder="100" type="number" name="worth" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+				if errors["worth"] != "" {
+					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["worth"] }</p>
+				}
+			</div>
+		</form>
+	</div>
+}
+
+templ PanelNewHintIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+
+) {
+	@layouts.AdminBase(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

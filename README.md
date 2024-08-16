@@ -10,7 +10,9 @@
   - [x] Add Question
   - [x] Delete Question
   - [ ] Edit Question
-  - [ ] Hints
+  - [x] Hints
+    - [x] Add hint
+    - [x] Delete hint
 - [ ] Game flow
   - [ ] Get Question
   - [ ] Submit Answer

@@ -66,6 +66,7 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
      	hint TEXT,
       	worth INT,
+       parent_question_id INT,
        	FOREIGN KEY (parent_question_id) REFERENCES questions(id)
 	);`
 

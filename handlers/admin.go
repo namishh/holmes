@@ -261,7 +261,10 @@ func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 }
 
 func (ah *AuthHandler) AdminHintsHandler(c echo.Context) error {
-	hints := make([]services.Hint, 0)
+	hints, err := ah.UserServices.GetHints()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error fetching hints")
+	}
 	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
 	if !ok {
 		return errors.New("invalid type for key 'FROMPROTECTED'")
@@ -270,6 +273,73 @@ func (ah *AuthHandler) AdminHintsHandler(c echo.Context) error {
 	adminLoginView := panel.PanelHints(fromProtected, hints)
 	c.Set("ISERROR", false)
 	return renderView(c, panel.PanelHintsIndex(
+		"Admin Panel",
+		"admin",
+		fromProtected,
+		c.Get("ISERROR").(bool),
+		adminLoginView,
+	))
+}
+
+func (ah *AuthHandler) AdminHintNewHandler(c echo.Context) error {
+	errs := make(map[string]string)
+	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
+	if !ok {
+		return errors.New("invalid type for key 'FROMPROTECTED'")
+	}
+
+	if c.Request().Method == "POST" {
+		title := c.FormValue("title")
+		level := c.FormValue("level")
+		worth := c.FormValue("worth")
+
+		if len(title) == 0 {
+			c.Set("ISERROR", true)
+			errs["title"] = "You can not scam people with an empty hint."
+		}
+
+		l, err := strconv.Atoi(level)
+		if err != nil {
+			c.Set("ISERROR", true)
+			errs["level"] = "Invalid level"
+		}
+
+		_, err = ah.UserServices.GetQuestionById(l)
+		if err != nil {
+			c.Set("ISERROR", true)
+			errs["level"] = "Invalid level"
+		}
+
+		w, err := strconv.Atoi(worth)
+		if err != nil {
+			c.Set("ISERROR", true)
+			errs["worth"] = "Invalid worth"
+		}
+
+		if len(errs) > 0 {
+			adminLoginView := panel.PanelNewHint(fromProtected, errs)
+			c.Set("ISERROR", false)
+			return renderView(c, panel.PanelNewHintIndex(
+				"Admin Panel",
+				"admin",
+				fromProtected,
+				c.Get("ISERROR").(bool),
+				adminLoginView,
+			))
+		}
+
+		err = ah.UserServices.CreateHint(services.Hint{Hint: title, ParentQuestionID: l, Worth: w})
+		if err != nil {
+			c.Set("ISERROR", true)
+			errs["title"] = "Error creating hint"
+		}
+
+		return c.Redirect(http.StatusSeeOther, "/su/hints")
+	}
+
+	adminLoginView := panel.PanelNewHint(fromProtected, errs)
+	c.Set("ISERROR", false)
+	return renderView(c, panel.PanelNewHintIndex(
 		"Admin Panel",
 		"admin",
 		fromProtected,

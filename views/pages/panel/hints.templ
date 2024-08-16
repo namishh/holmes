@@ -2,8 +2,10 @@
 package panel
 
 import (
+	"fmt"
 	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/layouts"
+	"strconv"
 )
 
 templ PanelHints(fromProtected bool, hints []services.Hint) {
@@ -20,7 +22,22 @@ templ PanelHints(fromProtected bool, hints []services.Hint) {
 				<h1 class="text-2xl text-gray-500">No hints available</h1>
 			</div>
 		} else {
-			<div class="grow overflow-scroll-y"></div>
+			<div class="grow overflow-scroll-y ">
+				<div class="flex flex-wrap">
+					for _, hint := range hints {
+						<div class="md:w-1/2 w-full xl:w-1/4 p-2">
+							<div class="p-4 w-full bg-gray-900 rounded-xl flex flex-col gap-2">
+								<div class="flex justify-between items-center">
+									<h1 class="text-xl font-bold">{ hint.Hint }</h1>
+									<a href={ templ.URL(fmt.Sprintf("/su/hints/delete/%d", hint.ID)) } class="px-4 py-[4px] bg-red-400 text-black rounded-lg">Delete</a>
+								</div>
+								<p>Level: { strconv.Itoa(hint.ParentQuestionID) }</p>
+								<p>Worth: { strconv.Itoa(hint.Worth) }</p>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
 		}
 	</div>
 }

@@ -19,12 +19,16 @@ func SetupRoutes(e *echo.Echo, ah *AuthHandler) {
 
 	e.GET("/logout", ah.flagsMiddleware(ah.LogoutHandler))
 
-	protectedGroup := e.Group("/su", ah.adminMiddleware)
-	protectedGroup.GET("", ah.AdminPageHandler)
-	protectedGroup.GET("/deleteteam/:id", ah.AdminDeleteTeam)
-	protectedGroup.GET("/deletequestion/:id", ah.AdminDeleteQuestion)
-	protectedGroup.GET("/question", ah.AdminQuestionHandler)
-	protectedGroup.POST("/question", ah.AdminQuestionHandler)
+	admingroup := e.Group("/su", ah.adminMiddleware)
+	admingroup.GET("", ah.AdminPageHandler)
+	admingroup.GET("/deleteteam/:id", ah.AdminDeleteTeam)
+	admingroup.GET("/deletequestion/:id", ah.AdminDeleteQuestion)
+	admingroup.GET("/question", ah.AdminQuestionHandler)
+	admingroup.POST("/question", ah.AdminQuestionHandler)
 
-	protectedGroup.GET("/hints", ah.AdminHintsHandler)
+	admingroup.GET("/hints", ah.AdminHintsHandler)
+	admingroup.GET("/hints/new", ah.AdminHintNewHandler)
+	admingroup.POST("/hints/new", ah.AdminHintNewHandler)
+
+	admingroup.GET("/hints/delete/:id", ah.AdminDeleteHint)
 }

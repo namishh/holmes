@@ -127,6 +127,7 @@ func (us *UserService) DeleteQuestion(id int) error {
 	c[0] = "images"
 	c[1] = "audios"
 	c[2] = "videos"
+	c[3] = "hints"
 
 	for _, table := range c {
 		query = fmt.Sprintf(`DELETE FROM %s  WHERE parent_question_id = ?`, table)
@@ -142,4 +143,20 @@ func (us *UserService) DeleteQuestion(id int) error {
 	}
 
 	return nil
+}
+
+func (us *UserService) GetQuestionById(id int) (Question, error) {
+	var q Question
+
+	query := `SELECT id, question, answer, title, points FROM questions WHERE id = ?`
+
+	err := us.UserStore.DB.QueryRow(query, id).Scan(&q.ID, &q.Question, &q.Answer, &q.Title, &q.Points)
+
+	if err != nil {
+		log.Printf("Error querying question with ID %d: %v", id, err)
+		return Question{}, err
+	}
+
+	log.Printf("Successfully retrieved question with ID: %d", id)
+	return q, nil
 }
