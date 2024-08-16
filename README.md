@@ -74,7 +74,8 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
 
 - Admin Panel
 <br>
-![admin panel](https://i.imgur.com/48Vrz7j.png)
+
+<img src="https://i.imgur.com/48Vrz7j.png">
 
 ### Todo
 - [x] Setup the project
