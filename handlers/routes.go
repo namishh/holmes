@@ -25,4 +25,6 @@ func SetupRoutes(e *echo.Echo, ah *AuthHandler) {
 	protectedGroup.GET("/deletequestion/:id", ah.AdminDeleteQuestion)
 	protectedGroup.GET("/question", ah.AdminQuestionHandler)
 	protectedGroup.POST("/question", ah.AdminQuestionHandler)
+
+	protectedGroup.GET("/hints", ah.AdminHintsHandler)
 }

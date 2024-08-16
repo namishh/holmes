@@ -48,10 +48,17 @@ templ PanelHome(fromProtected bool, users []services.User, questions []services.
 						</div>
 					} else {
 						<div class="grow mt-4 text-white overflow-y-scroll rounded-xl bg-gray-900/40 flex flex-col items-center">
+							<div class="w-full flex justify-between p-3 bg-gray-900">
+								<p class="w-1/5">Title</p>
+								<p class="">ID</p>
+								<p>Points</p>
+								<p class="w-1/5 text-right">Actions</p>
+							</div>
 							for i, qn := range questions {
 								if i % 2 == 0 {
 									<div class="w-full flex justify-between p-3 bg-gray-900/30">
 										<p class="w-1/5">{ qn.Title }</p>
+										<p class="">{ strconv.Itoa(qn.ID) }</p>
 										<p>{ strconv.Itoa(qn.Points ) } </p>
 										<div class="w-1/5 flex justify-end gap-2">
 											<a href={ templ.URL(fmt.Sprintf("/su/deletequestion/%d", qn.ID)) }>
@@ -65,6 +72,7 @@ templ PanelHome(fromProtected bool, users []services.User, questions []services.
 								} else {
 									<div class="w-full flex justify-between p-3 bg-gray-900">
 										<p class="w-1/5">{ qn.Title }</p>
+										<p class="">{ strconv.Itoa(qn.ID) }</p>
 										<p>{ strconv.Itoa(qn.Points ) } </p>
 										<div class="w-1/5 flex justify-end gap-2">
 											<a href={ templ.URL(fmt.Sprintf("/su/deletequestion/%d", qn.ID)) }>
@@ -93,16 +101,24 @@ templ PanelHome(fromProtected bool, users []services.User, questions []services.
 						</div>
 					} else {
 						<div class="grow mt-4 text-white overflow-y-scroll rounded-xl bg-gray-900/40 flex flex-col items-center">
+							<div class="w-full flex justify-between p-3 bg-gray-900">
+								<p class="w-1/5">Name</p>
+								<p class="">ID</p>
+								<p>Points</p>
+								<p class="text-right">Actions</p>
+							</div>
 							for i, team := range users {
 								if i % 2 == 0 {
 									<div class="w-full flex justify-between p-3 bg-gray-900/30">
 										<p class="w-1/5">{ team.Username }</p>
+										<p>{ strconv.Itoa(team.ID) } </p>
 										<p>{ strconv.Itoa(team.Level * 1000) } </p>
 										<a href={ templ.URL(fmt.Sprintf("/su/deleteteam/%d", team.ID)) } class="bg-red-600 px-3 py-1 rounded-md text-white">Delete</a>
 									</div>
 								} else {
 									<div class="w-full flex justify-between p-3 bg-gray-900">
 										<p class="w-1/5">{ team.Username }</p>
+										<p>{ strconv.Itoa(team.ID) } </p>
 										<p>{ strconv.Itoa(team.Level * 1000) } </p>
 										<a href={ templ.URL(fmt.Sprintf("/su/deleteteam/%d", team.ID)) } class="bg-red-600 px-3 py-1 rounded-md text-white">Delete</a>
 									</div>

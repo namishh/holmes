@@ -20,3 +20,4 @@
 - [ ] Host on digital ocean
 - [ ] Extra
   - [ ] Complete the home page
+  - [ ] Rate limiting

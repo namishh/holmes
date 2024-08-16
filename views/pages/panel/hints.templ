@@ -1,0 +1,39 @@
+
+package panel
+
+import (
+	"github.com/namishh/holmes/services"
+	"github.com/namishh/holmes/views/layouts"
+)
+
+templ PanelHints(fromProtected bool, hints []services.Hint) {
+	<div class="h-screen w-screen gap-4 flex text-white flex-col p-8">
+		<div class="w-full flex justify-between items-center">
+			<div class="flex items-center gap-2">
+				<img src="/static/hints.svg" class="h-6"/>
+				<h1 class="text-2xl font-bold">Hints</h1>
+			</div>
+			<a href="/su/hints/new" class="px-6 py-2 bg-blue-400 text-black rounded-lg">Add New</a>
+		</div>
+		if len(hints) < 1 {
+			<div class="grow bg-gray-900 rounded-xl overflow-scroll-y flex justify-center items-center">
+				<h1 class="text-2xl text-gray-500">No hints available</h1>
+			</div>
+		} else {
+			<div class="grow overflow-scroll-y"></div>
+		}
+	</div>
+}
+
+templ PanelHintsIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+
+) {
+	@layouts.AdminBase(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

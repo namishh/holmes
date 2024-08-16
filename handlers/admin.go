@@ -259,3 +259,21 @@ func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 		adminLoginView,
 	))
 }
+
+func (ah *AuthHandler) AdminHintsHandler(c echo.Context) error {
+	hints := make([]services.Hint, 0)
+	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
+	if !ok {
+		return errors.New("invalid type for key 'FROMPROTECTED'")
+	}
+
+	adminLoginView := panel.PanelHints(fromProtected, hints)
+	c.Set("ISERROR", false)
+	return renderView(c, panel.PanelHintsIndex(
+		"Admin Panel",
+		"admin",
+		fromProtected,
+		c.Get("ISERROR").(bool),
+		adminLoginView,
+	))
+}

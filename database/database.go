@@ -62,6 +62,18 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 		return fmt.Errorf("Failed to create table: %s", err)
 	}
 
+	stmt = `CREATE TABLE IF NOT EXISTS hints  (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+     	hint TEXT,
+      	worth INT,
+       	FOREIGN KEY (parent_question_id) REFERENCES questions(id)
+	);`
+
+	_, err = DB.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("Failed to create table: %s", err)
+	}
+
 	stmt = `CREATE TABLE IF NOT EXISTS images (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
     	path TEXT,
