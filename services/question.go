@@ -130,7 +130,7 @@ func (us *UserService) DeleteQuestion(id int) error {
 
 	stmt.Exec(id)
 
-	c := make([]string, 3)
+	c := make([]string, 4)
 	c[0] = "images"
 	c[1] = "audios"
 	c[2] = "videos"
@@ -223,17 +223,17 @@ func (us *UserService) GetMedia(query string) ([]string, error) {
 }
 
 func (us *UserService) UpdateQuestion(id int, title string, question string, points int, answer string) error {
-    query := `UPDATE questions 
-              SET title = ?, question = ?, points = ?, answer = ? 
+	query := `UPDATE questions
+              SET title = ?, question = ?, points = ?, answer = ?
               WHERE id = ?`
 
-    // Execute the update statement
-    _, err := us.UserStore.DB.Exec(query, title, question, points, answer, id)
-    if err != nil {
-        log.Printf("Error updating question with ID %d: %v", id, err)
-        return err
-    }
+	// Execute the update statement
+	_, err := us.UserStore.DB.Exec(query, title, question, points, answer, id)
+	if err != nil {
+		log.Printf("Error updating question with ID %d: %v", id, err)
+		return err
+	}
 
-    log.Printf("Update operation completed for question with ID: %d", id)
-    return nil
+	log.Printf("Update operation completed for question with ID: %d", id)
+	return nil
 }
