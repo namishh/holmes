@@ -12,7 +12,14 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
 ### Features
 - No javascript *
 - Very easy to extend
-- Built in admin panel to make
+- Built in admin panel to manage users, questions and hints
+- Adding images, videos and audios to questions
+- Built in authentication system
+- Built in rate limiting
+- Built in leaderboard
+- Easy to add custom routes
+
+\* (Except for the tailwind stuff and toggling the navbar)
 
 
 ### Run Locally
@@ -66,6 +73,7 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
 ### Screenshots
 
 - Admin Panel
+<br>
 ![admin panel](https://i.imgur.com/48Vrz7j.png)
 
 ### Todo
