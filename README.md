@@ -5,11 +5,13 @@
 - [x] Auth
   - [x] Login and Register
   - [x] Logout
-- [ ] Admin
+- [x] Admin
   - [x] Delete User
   - [x] Add Question
   - [x] Delete Question
-  - [ ] Edit Question
+  - [x] Edit Question
+    - [x] Edit Details
+    - [x] Edit Media
   - [x] Hints
     - [x] Add hint
     - [x] Delete hint

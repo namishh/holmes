@@ -27,17 +27,17 @@ templ PanelQuestion(fromProtected bool, errors map[string]string) {
 				</div>
 			</div>
 			<div class="flex flex-col my-6">
-				<label for="answer" class="text-md mb-2">The Answer</label>
-				<input id="answer" placeholder="Answer" name="answer" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
-				if errors["answer"] != "" {
-					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["answer"] }</p>
-				}
-			</div>
-			<div class="flex flex-col my-6">
 				<label for="question" class="text-md mb-2">Enter the question</label>
 				<textarea id="question" placeholder="The question" name="question" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"></textarea>
 				if errors["question"] != "" {
 					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["question"] }</p>
+				}
+			</div>
+			<div class="flex flex-col my-6">
+				<label for="answer" class="text-md mb-2">The Answer</label>
+				<input id="answer" placeholder="Answer" name="answer" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+				if errors["answer"] != "" {
+					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["answer"] }</p>
 				}
 			</div>
 			<div class="flex flex-col my-6">

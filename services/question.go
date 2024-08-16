@@ -33,7 +33,42 @@ type Audio struct {
 	ParentQuestionID int    `json:"parent_question_id"`
 }
 
-func (us *UserService) CreateQuestion(q Question, images []string, audios []string, videos []string) error {
+func (us *UserService) CreateMedia(ID int, images []string, videos []string, audios []string) error {
+
+	// Create images
+	for _, img := range images {
+		stmt := `INSERT INTO images (path, parent_question_id) VALUES (?, ?)`
+		_, err := us.UserStore.DB.Exec(stmt, img, ID)
+		if err != nil {
+			log.Printf("Error inserting image: %v", err)
+			return err
+		}
+	}
+
+	// Create audios
+	for _, audio := range audios {
+		stmt := `INSERT INTO audios (path, parent_question_id) VALUES (?, ?)`
+		_, err := us.UserStore.DB.Exec(stmt, audio, ID)
+		if err != nil {
+			log.Printf("Error inserting audio: %v", err)
+			return err
+		}
+	}
+
+	// Create videos
+	for _, video := range videos {
+		stmt := `INSERT INTO videos (path, parent_question_id) VALUES (?, ?)`
+		_, err := us.UserStore.DB.Exec(stmt, video, ID)
+		if err != nil {
+			log.Printf("Error inserting video: %v", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (us *UserService) CreateQuestion(q Question, images []string, videos []string, audios []string) error {
 	// Create a question and get its ID
 	stmt := `INSERT INTO questions (question, answer, title, points) VALUES (?, ?, ?, ?) RETURNING id`
 	ans, err := bcrypt.GenerateFromPassword([]byte(q.Answer), bcrypt.DefaultCost)
@@ -48,35 +83,7 @@ func (us *UserService) CreateQuestion(q Question, images []string, audios []stri
 	}
 	log.Printf("Created question with ID: %d", q.ID)
 
-	// Create images
-	for _, img := range images {
-		stmt = `INSERT INTO images (path, parent_question_id) VALUES (?, ?)`
-		_, err = us.UserStore.DB.Exec(stmt, img, q.ID)
-		if err != nil {
-			log.Printf("Error inserting image: %v", err)
-			return err
-		}
-	}
-
-	// Create audios
-	for _, audio := range audios {
-		stmt = `INSERT INTO audios (path, parent_question_id) VALUES (?, ?)`
-		_, err = us.UserStore.DB.Exec(stmt, audio, q.ID)
-		if err != nil {
-			log.Printf("Error inserting audio: %v", err)
-			return err
-		}
-	}
-
-	// Create videos
-	for _, video := range videos {
-		stmt = `INSERT INTO videos (path, parent_question_id) VALUES (?, ?)`
-		_, err = us.UserStore.DB.Exec(stmt, video, q.ID)
-		if err != nil {
-			log.Printf("Error inserting video: %v", err)
-			return err
-		}
-	}
+	us.CreateMedia(q.ID, images, videos, audios)
 
 	return nil
 }
@@ -145,6 +152,32 @@ func (us *UserService) DeleteQuestion(id int) error {
 	return nil
 }
 
+func (us *UserService) DeleteMedia(id int, table string) error {
+	query := fmt.Sprintf(`DELETE FROM %s WHERE id = ?`, table)
+	stmt, err := us.UserStore.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	stmt.Exec(id)
+
+	return nil
+}
+
+// get id by path
+func (us *UserService) GetIdByPath(path string, table string) (int, error) {
+	query := fmt.Sprintf(`SELECT id FROM %s WHERE path = ?`, table)
+	var id int
+	err := us.UserStore.DB.QueryRow(query, path).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}
+
 func (us *UserService) GetQuestionById(id int) (Question, error) {
 	var q Question
 
@@ -159,4 +192,48 @@ func (us *UserService) GetQuestionById(id int) (Question, error) {
 
 	log.Printf("Successfully retrieved question with ID: %d", id)
 	return q, nil
+}
+
+func (us *UserService) GetMedia(query string) ([]string, error) {
+	media := make([]string, 0)
+	log.Printf("Query: %s", query)
+	stmt, err := us.UserStore.DB.Prepare(query)
+	if err != nil {
+		return media, err
+	}
+
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return media, err
+	}
+
+	for rows.Next() {
+		var u string
+		err := rows.Scan(&u)
+		if err != nil {
+			return media, err
+		}
+
+		media = append(media, u)
+	}
+
+	return media, nil
+}
+
+func (us *UserService) UpdateQuestion(id int, title string, question string, points int, answer string) error {
+    query := `UPDATE questions 
+              SET title = ?, question = ?, points = ?, answer = ? 
+              WHERE id = ?`
+
+    // Execute the update statement
+    _, err := us.UserStore.DB.Exec(query, title, question, points, answer, id)
+    if err != nil {
+        log.Printf("Error updating question with ID %d: %v", id, err)
+        return err
+    }
+
+    log.Printf("Update operation completed for question with ID: %d", id)
+    return nil
 }

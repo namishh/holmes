@@ -31,4 +31,10 @@ func SetupRoutes(e *echo.Echo, ah *AuthHandler) {
 	admingroup.POST("/hints/new", ah.AdminHintNewHandler)
 
 	admingroup.GET("/hints/delete/:id", ah.AdminDeleteHint)
+	admingroup.GET("/editquestion/:id", ah.AdminEditQuestionHandler)
+	admingroup.POST("/editquestion/:id", ah.AdminEditQuestionHandler)
+
+	admingroup.GET("/editquestion/delimage/:name", ah.AdminDeleteImage)
+	admingroup.GET("/editquestion/delvideo/:name", ah.AdminDeleteVideo)
+	admingroup.GET("/editquestion/delaudio/:name", ah.AdminDeleteAudio)
 }

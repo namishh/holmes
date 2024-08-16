@@ -17,6 +17,7 @@ import (
 	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/pages"
 	"github.com/namishh/holmes/views/pages/panel"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (ah *AuthHandler) adminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -260,6 +261,59 @@ func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 	))
 }
 
+func (ah *AuthHandler) AdminDeleteTeam(c echo.Context) error {
+	teamID := c.Param("id")
+	ti, err := strconv.Atoi(teamID)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+
+	}
+
+	ah.UserServices.DeleteTeam(ti)
+
+	return c.Redirect(http.StatusSeeOther, "/su")
+}
+
+func (ah *AuthHandler) AdminDeleteQuestion(c echo.Context) error {
+	qid := c.Param("id")
+	ti, err := strconv.Atoi(qid)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+
+	}
+
+	ah.UserServices.DeleteQuestion(ti)
+
+	return c.Redirect(http.StatusSeeOther, "/su")
+}
+
+func (ah *AuthHandler) AdminDeleteHint(c echo.Context) error {
+	qid := c.Param("id")
+	ti, err := strconv.Atoi(qid)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+
+	}
+
+	ah.UserServices.DeleteHint(ti)
+
+	return c.Redirect(http.StatusSeeOther, "/su/hints")
+}
 func (ah *AuthHandler) AdminHintsHandler(c echo.Context) error {
 	hints, err := ah.UserServices.GetHints()
 	if err != nil {
@@ -346,4 +400,174 @@ func (ah *AuthHandler) AdminHintNewHandler(c echo.Context) error {
 		c.Get("ISERROR").(bool),
 		adminLoginView,
 	))
+}
+
+func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
+	qid := c.Param("id")
+	errs := make(map[string]string)
+	inputs := make(map[string]string)
+	media := make(map[string][]string)
+	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
+	if !ok {
+		return errors.New("invalid type for key 'FROMPROTECTED'")
+	}
+	t, err := strconv.Atoi(qid)
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+	}
+
+	question, err := ah.UserServices.GetQuestionById(t)
+
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+	}
+
+	inputs["title"] = question.Title
+	inputs["question"] = question.Question
+	inputs["points"] = strconv.Itoa(question.Points)
+
+	media["images"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT path FROM images where parent_question_id = %d", t))
+	media["videos"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT path FROM videos where parent_question_id = %d", t))
+	media["audios"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT path FROM audios where parent_question_id = %d", t))
+
+	if c.Request().Method == "POST" {
+
+		form, err := c.MultipartForm()
+		if err != nil {
+			return err
+		}
+		images, err := MakeArray("images", form, "IMG")
+		if err != nil {
+			return err
+		}
+		videos, err := MakeArray("videos", form, "VID")
+		if err != nil {
+			return err
+		}
+		audios, err := MakeArray("audios", form, "AUD")
+		if err != nil {
+			return err
+		}
+		log.Println(images, videos, audios)
+		err = ah.UserServices.CreateMedia(t, images, videos, audios)
+
+		title := c.FormValue("title")
+		qn := c.FormValue("question")
+		points := c.FormValue("points")
+		answer := c.FormValue("answer")
+
+		if answer != "" {
+			answer = question.Answer
+		} else {
+			by, err := bcrypt.GenerateFromPassword([]byte(answer), bcrypt.DefaultCost)
+			if err != nil {
+				return err
+			}
+			answer = string(by)
+		}
+
+		if len(title) == 0 {
+			c.Set("ISERROR", true)
+			errs["title"] = "Empty title."
+		}
+
+		if len(qn) == 0 {
+			c.Set("ISERROR", true)
+			errs["question"] = "Empty question."
+		}
+
+		p, err := strconv.Atoi(points)
+		if err != nil || p == 0 {
+			c.Set("ISERROR", true)
+			errs["points"] = "Invalid Points."
+		}
+
+		if len(errs) > 0 {
+			view := panel.PanelEditQuestion(fromProtected, errs, inputs, media)
+
+			c.Set("ISERROR", false)
+
+			return renderView(c, panel.PanelEditQuestionIndex(
+				"Edit",
+				"",
+				fromProtected,
+				c.Get("ISERROR").(bool),
+				view,
+			))
+		}
+		
+		
+		err = ah.UserServices.UpdateQuestion(t, title, qn, p, answer)
+		return c.Redirect(http.StatusSeeOther, "/su")
+	}
+
+	view := panel.PanelEditQuestion(fromProtected, errs, inputs, media)
+
+	c.Set("ISERROR", false)
+
+	return renderView(c, panel.PanelEditQuestionIndex(
+		"Edit",
+		"",
+		fromProtected,
+		c.Get("ISERROR").(bool),
+		view,
+	))
+}
+
+func (ah *AuthHandler) AdminDeleteImage(c echo.Context) error {
+	qid := c.Param("name")
+	qid = fmt.Sprintf("/static/%s", qid)
+	n, err := ah.UserServices.GetIdByPath(qid, "images")
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+	}
+	ah.UserServices.DeleteMedia(n, "images")
+	return c.Redirect(http.StatusSeeOther, "/su")
+}
+
+func (ah *AuthHandler) AdminDeleteAudio(c echo.Context) error {
+	qid := c.Param("name")
+	qid = fmt.Sprintf("/static/%s", qid)
+	n, err := ah.UserServices.GetIdByPath(qid, "audios")
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+	}
+	ah.UserServices.DeleteMedia(n, "audios")
+	return c.Redirect(http.StatusSeeOther, "/su")
+}
+
+func (ah *AuthHandler) AdminDeleteVideo(c echo.Context) error {
+	qid := c.Param("name")
+	qid = fmt.Sprintf("/static/%s", qid)
+	n, err := ah.UserServices.GetIdByPath(qid, "videos")
+	if err != nil {
+		return echo.NewHTTPError(
+			echo.ErrNotFound.Code,
+			fmt.Sprintf(
+				"something went wrong: %s",
+				err,
+			))
+	}
+	ah.UserServices.DeleteMedia(n, "videos")
+	return c.Redirect(http.StatusSeeOther, "/su")
 }

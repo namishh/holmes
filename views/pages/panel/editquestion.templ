@@ -1,0 +1,131 @@
+
+package panel
+
+import (
+	"fmt"
+	"github.com/namishh/holmes/views/layouts"
+	"strings"
+)
+
+templ PanelEditQuestion(fromProtected bool, errors map[string]string, inputs map[string]string, media map[string][]string) {
+	<div class="min-h-screen w-screen flex items-center flex-col  p-2 md:p-8">
+		<form enctype="multipart/form-data" method="post" class="bg-gray-900 text-white rounded-lg p-4 w-full lg:w-2/3 xl:w-1/2" action="">
+			<div class="mb-2 flex justify-between">
+				<h1 class="text-2xl font-bold">Edit Question</h1>
+				<button type="submit">Submit</button>
+			</div>
+			<div class="py-[1px] bg-gray-800 my-3 px-12"></div>
+			<div class="flex md:flex-row flex-col gap-4 my-2">
+				<div class="flex flex-col ">
+					<label for="title" class="text-md mb-2">An appropiate title</label>
+					<input id="title" value={ inputs["title"] } placeholder="New Question" name="title" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+					if errors["title"] != "" {
+						<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["title"] }</p>
+					}
+				</div>
+				<div class="flex flex-col">
+					<label for="points" class="text-md mb-2">Points</label>
+					<input type="number" value={ inputs["points"] } id="points" placeholder="Points" name="points" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+					if errors["points"] != "" {
+						<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["points"] }</p>
+					}
+				</div>
+			</div>
+			<div class="flex flex-col my-6">
+				<label for="question" class="text-md mb-2">Enter the question</label>
+				<textarea id="question" placeholder="The question" name="question" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2">{ inputs["question"] }</textarea>
+				if errors["question"] != "" {
+					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["question"] }</p>
+				}
+			</div>
+			<div class="flex flex-col my-6">
+				<label for="answer" class="text-md mb-2">Change The Answer</label>
+				<input id="answer" placeholder="New Answer" name="answer" class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2"/>
+				if errors["answer"] != "" {
+					<p class="text-blue-300 ml-2 mt-1 text-sm">{ errors["answer"] }</p>
+				}
+			</div>
+			//			<div class="flex flex-col my-6">
+			//				<label for="images" class="text-md mb-2">Add new Images</label>
+			//				<input id="images" placeholder="New Description" name="images" type="file" multiple class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2" accept="image/*"/>
+			//			</div>
+			//			<div class="flex flex-col my-6">
+			//				<label for="images" class="text-md mb-2">Add new Audio</label>
+			//				<input id="images" placeholder="New Description" name="audios" type="file" multiple class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2" accept="audio/*"/>
+			//			</div>
+			//			<div class="flex flex-col mt-6">
+			//				<label for="images" class="text-md mb-2">Videos</label>
+			//				<input id="images" placeholder="New Description" name="videos" type="file" multiple class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2" accept="video/*"/>
+			//			</div>
+			<div class="mb-2 flex justify-between">
+				<h1 class="text-2xl font-bold">Add Images</h1>
+			</div>
+			<div class="py-[1px] bg-gray-800 my-3 px-12"></div>
+			<div class="flex flex-col my-6">
+				if len(media["images"]) > 0 {
+					<div class="flex flex-wrap gap-3 mb-10">
+						for _, img := range media["images"] {
+							<div class="group relative">
+								<a class="group-hover:opacity-100 transition opacity-0 absolute top-2 right-2 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delimage/%s", strings.ReplaceAll(img, "/static/", ""))) }>trash</a>
+								<img class="h-32 transition group-hover:opacity-100 rounded-lg opacity-40" src={ img }/>
+							</div>
+						}
+					</div>
+				}
+				<label for="images" class="text-md mb-2">Add new Images</label>
+				<input id="images" placeholder="New Description" name="images" type="file" multiple class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2" accept="image/*"/>
+			</div>
+			<div class="mb-2 flex justify-between">
+				<h1 class="text-2xl font-bold">Add Audios</h1>
+			</div>
+			<div class="py-[1px] bg-gray-800 my-3 px-12"></div>
+			<div class="flex flex-col my-6">
+				if len(media["audios"]) > 0 {
+					<div class="flex flex-wrap gap-3 mb-10">
+						for _, img := range media["audios"] {
+							<div class="group relative">
+								<a class="group-hover:opacity-100 transition text-sm opacity-0 absolute top-0 right-0 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delaudio/%s", strings.ReplaceAll(img, "/static/", ""))) }>trash</a>
+								<audio controls>
+									<source src={ img } type="audio/mpeg"/>
+									Your browser does not support the audio element.
+								</audio>
+							</div>
+						}
+					</div>
+				}
+				<label for="audios" class="text-md mb-2">Add new Audios</label>
+				<input id="audios" placeholder="New Description" name="audios" type="file" multiple class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2" accept="audio/*"/>
+			</div>
+			<div class="mb-2 flex justify-between">
+				<h1 class="text-2xl font-bold">Add Vidoes</h1>
+			</div>
+			<div class="py-[1px] bg-gray-800 my-3 px-12"></div>
+			<div class="flex flex-col my-6">
+				if len(media["videos"]) > 0 {
+					<div class="flex flex-wrap gap-3 mb-10">
+						for _, img := range media["videos"] {
+							<div class="group relative">
+								<a class="group-hover:opacity-100 transition opacity-0 absolute top-2 right-2 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delvideo/%s", strings.ReplaceAll(img, "/static/", ""))) }>trash</a>
+								<video class="h-32 transition group-hover:opacity-100 rounded-lg opacity-40" src={ img }></video>
+							</div>
+						}
+					</div>
+				}
+				<label for="videos" class="text-md mb-2">Add new videos</label>
+				<input id="vidoes" placeholder="New Description" name="videos" type="file" multiple class="focus:outline-none rounded-lg outline-none bg-gray-950/30 px-4 py-2" accept="video/*"/>
+			</div>
+		</form>
+	</div>
+}
+
+templ PanelEditQuestionIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+) {
+	@layouts.AdminBase(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"net/mail"
-	"strconv"
 	"strings"
 
 	"github.com/a-h/templ"
@@ -38,11 +36,17 @@ type AuthService interface {
 	GetAllQuestions() ([]services.Question, error)
 	DeleteQuestion(id int) error
 	CreateQuestion(q services.Question, images []string, video []string, audio []string) error
+	CreateMedia(ID int, images []string, videos []string, audios []string) error
 	GetQuestionById(id int) (services.Question, error)
+	UpdateQuestion(id int, title string, question string, points int, answer string) error
 
 	GetHints() ([]services.Hint, error)
 	CreateHint(h services.Hint) error
 	DeleteHint(id int) error
+
+	GetMedia(query string) ([]string, error)
+	GetIdByPath(path string, table string) (int, error)
+	DeleteMedia(id int, table string) error
 }
 
 type AuthHandler struct {
@@ -340,58 +344,4 @@ func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
 	c.Set("FROMPROTECTED", false)
 
 	return c.Redirect(http.StatusSeeOther, "/login")
-}
-
-func (ah *AuthHandler) AdminDeleteTeam(c echo.Context) error {
-	teamID := c.Param("id")
-	ti, err := strconv.Atoi(teamID)
-	if err != nil {
-		return echo.NewHTTPError(
-			echo.ErrNotFound.Code,
-			fmt.Sprintf(
-				"something went wrong: %s",
-				err,
-			))
-
-	}
-
-	ah.UserServices.DeleteTeam(ti)
-
-	return c.Redirect(http.StatusSeeOther, "/su")
-}
-
-func (ah *AuthHandler) AdminDeleteQuestion(c echo.Context) error {
-	qid := c.Param("id")
-	ti, err := strconv.Atoi(qid)
-	if err != nil {
-		return echo.NewHTTPError(
-			echo.ErrNotFound.Code,
-			fmt.Sprintf(
-				"something went wrong: %s",
-				err,
-			))
-
-	}
-
-	ah.UserServices.DeleteQuestion(ti)
-
-	return c.Redirect(http.StatusSeeOther, "/su")
-}
-
-func (ah *AuthHandler) AdminDeleteHint(c echo.Context) error {
-	qid := c.Param("id")
-	ti, err := strconv.Atoi(qid)
-	if err != nil {
-		return echo.NewHTTPError(
-			echo.ErrNotFound.Code,
-			fmt.Sprintf(
-				"something went wrong: %s",
-				err,
-			))
-
-	}
-
-	ah.UserServices.DeleteHint(ti)
-
-	return c.Redirect(http.StatusSeeOther, "/su/hints")
 }
