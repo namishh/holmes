@@ -15,8 +15,8 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/namishh/holmes/services"
-	"github.com/namishh/holmes/views/pages"
 	"github.com/namishh/holmes/views/pages/panel"
+	"github.com/namishh/holmes/views/pages/auth"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -74,9 +74,9 @@ func (ah *AuthHandler) AdminHandler(c echo.Context) error {
 			c.Set("ISERROR", true)
 			errs["pass"] = "Incorrect Password"
 
-			adminLoginView := pages.AdminLogin(fromProtected, errs)
+			adminLoginView := auth.AdminLogin(fromProtected, errs)
 			c.Set("ISERROR", false)
-			return renderView(c, pages.AdminLoginIndex(
+			return renderView(c, auth.AdminLoginIndex(
 				"Admin Panel",
 				"admin",
 				fromProtected,
@@ -115,9 +115,9 @@ func (ah *AuthHandler) AdminHandler(c echo.Context) error {
 
 	//sess, _ := session.Get(auth_sessions_key, c)
 	// isError = false
-	adminLoginView := pages.AdminLogin(fromProtected, errs)
+	adminLoginView := auth.AdminLogin(fromProtected, errs)
 	c.Set("ISERROR", false)
-	return renderView(c, pages.AdminLoginIndex(
+	return renderView(c, auth.AdminLoginIndex(
 		"Admin Panel",
 		"admin",
 		fromProtected,
