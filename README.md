@@ -93,6 +93,7 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
     - [x] Add hint
     - [x] Delete hint
 - [ ] Game flow
+  - [x] Get all questions
   - [ ] Get Question
   - [ ] Submit Answer
   - [ ] Get Hint

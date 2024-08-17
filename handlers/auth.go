@@ -39,6 +39,8 @@ type AuthService interface {
 	CreateMedia(ID int, images []string, videos []string, audios []string) error
 	GetQuestionById(id int) (services.Question, error)
 	UpdateQuestion(id int, title string, question string, points int, answer string) error
+	GetAllQuestionsWithStatus(userID int) ([]services.QuestionWithStatus, error)
+	HasCompletedAllQuestions(userID int) (bool, error)
 
 	GetHints() ([]services.Hint, error)
 	CreateHint(h services.Hint) error

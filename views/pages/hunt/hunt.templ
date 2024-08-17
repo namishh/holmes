@@ -1,12 +1,14 @@
 package hunt
 
 import (
+	"fmt"
 	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/layouts"
+	"strconv"
 )
 
-templ Hunt(fromProtected bool, questions []services.Question) {
-	<div class="min-h-screen w-screen flex flex-col items-center ">
+templ Hunt(fromProtected bool, questions []services.QuestionWithStatus, hasCompleted bool) {
+	<div class="h-screen w-screen flex flex-col items-center ">
 		<div class="h-[12rem] w-full p-3" style="background-image: url('/static/banner.jpg');">
 			<div class="flex justify-center items-center h-full">
 				<h1 class="text-2xl md:text-4xl font-bold text-white">Cryptic <span class="text-blue-400">Hunt.</span></h1>
@@ -16,6 +18,33 @@ templ Hunt(fromProtected bool, questions []services.Question) {
 			<div class="p-4 text-gray-500">
 				No questions available.
 			</div>
+		} else {
+			if hasCompleted {
+				<div class="grow overflow-scroll-y p-4">
+					<div class="flex flex-wrap">
+						for _, qn := range questions {
+							<div class="w-full md:w-1/2 lg:w-1/3 p-4">
+								<div class="bg-gray-900 shadow-md p-4 rounded-lg">
+									<h2 class="text-xl font-bold text-white">{ qn.Title }</h2>
+									<p class="text-gray-600"></p>
+									<div class="mt-4 flex justify-between">
+										if qn.Solved {
+											<p class="text-emerald-400">Solved</p>
+										} else {
+											<a href={ templ.URL(fmt.Sprintf("/hunt/question/%d", qn.ID)) } class="text-blue-400">Solve</a>
+										}
+										<p class="text-white text-sm">Points: { strconv.Itoa(qn.Points) }</p>
+									</div>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			} else {
+				<div class="p-4 text-gray-500">
+					You have already completed the hunt. 🎉
+				</div>
+			}
 		}
 	</div>
 }
