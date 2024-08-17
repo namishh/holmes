@@ -5,12 +5,16 @@ import (
 	"github.com/namishh/holmes/views/layouts"
 )
 
-templ Question(fromProtected bool, qn services.Question, hasCompleted bool, media map[string][]string) {
+templ Question(fromProtected bool, qn services.Question, hasCompleted bool, media map[string][]string, errs map[string]string) {
 	<div class="min-h-screen">
 		<div class="form fixed bottom-12 h-[3.5rem] md:px-0 px-4  w-full flex justify-center items-center">
 			<form action="" method="POST" class="w-full h-full bg-gray-900 rounded-xl  shadow-xl border-2 border-gray-700 md:w-2/3 lg:w-1/2 flex flex-row-reverse xl:w-1/3">
-				<button type="submit" class="bg-blue-400 px-8 font-bold rounded-r-xl">Submit</button>
-				<input class="grow rounded-l-xl focus:outline outline-none bg-gray-900 px-8 text-white" placeholder="Answer Here"/>
+				if len(errs["answer"]) > 0 {
+					<button type="submit" class="bg-red-500 px-8 font-bold rounded-r-xl">Submit</button>
+				} else {
+					<button type="submit" class="bg-blue-400 px-8 font-bold rounded-r-xl">Submit</button>
+				}
+				<input id="answer" name="answer" required class="grow rounded-l-xl focus:outline outline-none bg-gray-900 px-8 text-white" placeholder="Answer Here"/>
 			</form>
 		</div>
 		<div class="h-[12rem] w-full p-3" style="background-image: url('/static/banner.jpg');">
@@ -21,8 +25,10 @@ templ Question(fromProtected bool, qn services.Question, hasCompleted bool, medi
 		if !hasCompleted {
 			<div class="w-full flex justify-center">
 				<div class="flex text-white flex-col  w-full p-4 md:w-2/3 lg:w-1/2 xl:w-1/3">
-					<h1 class="text-2xl text-blue-400 font-bold">Prompt: </h1>
-					<p class="text-xl mt-3">{ qn.Question }</p>
+					if len(qn.Question) > 0 {
+						<h1 class="text-2xl text-blue-400 font-bold">Prompt: </h1>
+						<p class="text-xl mt-3">{ qn.Question }</p>
+					}
 					if len(media["images"]) > 0 || len(media["videos"]) > 0 || len(media["audios"]) > 0 {
 						<h1 class="text-2xl mt-6 text-blue-400 font-bold">Media: </h1>
 						for _, m := range media["images"] {

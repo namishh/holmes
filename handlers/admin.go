@@ -481,11 +481,6 @@ func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
 			errs["title"] = "Empty title."
 		}
 
-		if len(qn) == 0 {
-			c.Set("ISERROR", true)
-			errs["question"] = "Empty question."
-		}
-
 		p, err := strconv.Atoi(points)
 		if err != nil || p == 0 {
 			c.Set("ISERROR", true)

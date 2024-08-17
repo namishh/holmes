@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/namishh/holmes/views/pages"
 	"github.com/namishh/holmes/views/pages/hunt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (ah *AuthHandler) HomeHandler(c echo.Context) error {
@@ -65,6 +67,7 @@ func (ah *AuthHandler) Hunt(c echo.Context) error {
 }
 
 func (ah *AuthHandler) Question(c echo.Context) error {
+	errs := make(map[string]string)
 	lvl, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
@@ -87,7 +90,32 @@ func (ah *AuthHandler) Question(c echo.Context) error {
 	if !ok {
 		return errors.New("invalid type for key 'FROMPROTECTED'")
 	}
-	quizview := hunt.Question(fromProtected, question, hasCompleted, media)
+
+	if c.Request().Method == "POST" {
+		answer := c.FormValue("answer")
+		log.Print(bcrypt.CompareHashAndPassword([]byte(question.Answer), []byte(answer)))
+		if bcrypt.CompareHashAndPassword([]byte(question.Answer), []byte(answer)) == nil {
+			err = ah.UserServices.MarkQuestionAsCompleted(c.Get(user_id_key).(int), lvl)
+			if err != nil {
+				return c.String(http.StatusInternalServerError, fmt.Sprintf("Error Validating: %s", err))
+			}
+
+			return c.Redirect(http.StatusFound, "/hunt")
+		}
+
+		errs["answer"] = "Incorrect Answer"
+		quizview := hunt.Question(fromProtected, question, hasCompleted, media, errs)
+		c.Set("ISERROR", false)
+		return renderView(c, hunt.QuestionIndex(
+			"Solve",
+			c.Get(user_name_key).(string),
+			fromProtected,
+			c.Get("ISERROR").(bool),
+			quizview,
+		))
+	}
+
+	quizview := hunt.Question(fromProtected, question, hasCompleted, media, errs)
 	c.Set("ISERROR", false)
 	return renderView(c, hunt.QuestionIndex(
 		"Solve",
