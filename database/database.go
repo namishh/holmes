@@ -40,6 +40,7 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
     	points INT DEFAULT 0,
 		password VARCHAR(255) NOT NULL,
 		name VARCHAR(255) UNIQUE NOT NULL,
+		last_answered_question TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 	`
@@ -105,6 +106,20 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
      	parent_question_id INTEGER,
      	FOREIGN KEY(parent_question_id) REFERENCES questions(id)
 	);`
+
+	_, err = DB.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("Failed to create table: %s", err)
+	}
+
+	stmt = `CREATE TABLE IF NOT EXISTS team_completed_questions (
+    team_id INTEGER,
+    question_id INTEGER,
+    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (team_id, question_id),
+    FOREIGN KEY (team_id) REFERENCES teams(id),
+    FOREIGN KEY (question_id) REFERENCES questions(id)
+    );`
 
 	_, err = DB.Exec(stmt)
 	if err != nil {
