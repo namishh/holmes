@@ -2,8 +2,6 @@ package services
 
 import (
 	"log"
-	"reflect"
-	"sort"
 )
 
 type QuestionWithStatus struct {
@@ -51,41 +49,34 @@ func (us *UserService) GetAllQuestionsWithStatus(userID int) ([]QuestionWithStat
 	return questions, nil
 }
 
-func (us *UserService) HasCompletedAllQuestions(userID int) (bool, error) {
-	// Get all question IDs
-	var allQuestionIDs []int
-	query := `SELECT id FROM questions`
-	rows, err := us.UserStore.DB.Query(query)
+func (us *UserService) HasCompletedAllQuestions(teamID int) (bool, error) {
+	// Get total number of questions
+	var totalQuestions int
+	queryTotal := `SELECT COUNT(*) FROM questions`
+	err := us.UserStore.DB.QueryRow(queryTotal).Scan(&totalQuestions)
 	if err != nil {
-		log.Printf("Error getting all question IDs: %v", err)
-		return false, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var id int
-		if err := rows.Scan(&id); err != nil {
-			return false, err
-		}
-		allQuestionIDs = append(allQuestionIDs, id)
-	}
-
-	// Get completed question IDs for the user
-	completedQuestions, err := us.GetCompletedQuestions(userID)
-	if err != nil {
+		log.Printf("Error getting total question count: %v", err)
 		return false, err
 	}
 
-	// Compare the slices
-	if len(allQuestionIDs) != len(completedQuestions) {
+	// Get number of completed questions for the team
+	var completedCount int
+	queryCompleted := `SELECT COUNT(*) FROM team_completed_questions WHERE team_id = ?`
+	err = us.UserStore.DB.QueryRow(queryCompleted, teamID).Scan(&completedCount)
+	if err != nil {
+		log.Printf("Error getting completed question count for team %d: %v", teamID, err)
+		return false, err
+	}
+
+	// Compare counts
+	if totalQuestions == 0 {
 		return false, nil
 	}
-	sort.Ints(allQuestionIDs)
-	sort.Ints(completedQuestions)
-	return reflect.DeepEqual(allQuestionIDs, completedQuestions), nil
+	return completedCount >= totalQuestions, nil
 }
 
 func (us *UserService) MarkQuestionAsCompleted(userID, questionID int) error {
-	query := `INSERT OR IGNORE INTO user_completed_questions (user_id, question_id) VALUES (?, ?)`
+	query := `INSERT OR IGNORE INTO team_completed_questions (team_id, question_id) VALUES (?, ?)`
 	_, err := us.UserStore.DB.Exec(query, userID, questionID)
 	if err != nil {
 		log.Printf("Error marking question %d as completed for user %d: %v", questionID, userID, err)
@@ -95,7 +86,7 @@ func (us *UserService) MarkQuestionAsCompleted(userID, questionID int) error {
 }
 
 func (us *UserService) GetCompletedQuestions(userID int) ([]int, error) {
-	query := `SELECT question_id FROM user_completed_questions WHERE user_id = ?`
+	query := `SELECT question_id FROM team_completed_questions WHERE team_id = ?`
 	rows, err := us.UserStore.DB.Query(query, userID)
 	if err != nil {
 		log.Printf("Error getting completed questions for user %d: %v", userID, err)

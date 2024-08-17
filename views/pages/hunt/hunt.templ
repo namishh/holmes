@@ -19,7 +19,7 @@ templ Hunt(fromProtected bool, questions []services.QuestionWithStatus, hasCompl
 				No questions available.
 			</div>
 		} else {
-			if hasCompleted {
+			if !hasCompleted {
 				<div class="grow overflow-scroll-y p-4">
 					<div class="flex flex-wrap">
 						for _, qn := range questions {
