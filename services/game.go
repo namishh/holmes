@@ -106,3 +106,17 @@ func (us *UserService) GetCompletedQuestions(userID int) ([]int, error) {
 
 	return completedQuestions, nil
 }
+
+// Take a question ID, team ID and check if the question is solved by the team
+// Return true if solved, false otherwise
+
+func (us *UserService) IsQuestionSolvedByTeam(teamID, questionID int) (bool, error) {
+	query := `SELECT COUNT(*) FROM team_completed_questions WHERE team_id = ? AND question_id = ?`
+	var count int
+	err := us.UserStore.DB.QueryRow(query, teamID, questionID).Scan(&count)
+	if err != nil {
+		log.Printf("Error checking if question %d is solved by team %d: %v", questionID, teamID, err)
+		return false, err
+	}
+	return count > 0, nil
+}

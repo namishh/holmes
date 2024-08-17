@@ -21,6 +21,7 @@ func SetupRoutes(e *echo.Echo, ah *AuthHandler) {
 
 	protectedgroup := e.Group("/hunt", ah.authMiddleware)
 	protectedgroup.GET("", ah.authMiddleware(ah.Hunt))
+	protectedgroup.GET("/question/:id", ah.authMiddleware(ah.Question))
 
 	admingroup := e.Group("/su", ah.adminMiddleware)
 	admingroup.GET("", ah.AdminPageHandler)

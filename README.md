@@ -99,6 +99,7 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   - [ ] Get Hint
   - [ ] Get Score
 - [ ] Leaderboard
+- [ ] Error Pages
 - [ ] Host on digital ocean
 - [ ] Extra
   - [ ] Complete the home page

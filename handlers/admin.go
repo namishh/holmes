@@ -15,8 +15,8 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/namishh/holmes/services"
-	"github.com/namishh/holmes/views/pages/panel"
 	"github.com/namishh/holmes/views/pages/auth"
+	"github.com/namishh/holmes/views/pages/panel"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -58,7 +58,7 @@ func (ah *AuthHandler) adminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 func (ah *AuthHandler) AdminHandler(c echo.Context) error {
 
 	sess, _ := session.Get(auth_sessions_key, c)
-	if user, ok := sess.Values[user_type].(string); !ok || user == "admin" {
+	if user, _ := sess.Values[user_type].(string); user == "admin" {
 		return c.Redirect(http.StatusSeeOther, "/su")
 	}
 
@@ -505,8 +505,7 @@ func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
 				view,
 			))
 		}
-		
-		
+
 		err = ah.UserServices.UpdateQuestion(t, title, qn, p, answer)
 		return c.Redirect(http.StatusSeeOther, "/su")
 	}

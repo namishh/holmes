@@ -237,3 +237,34 @@ func (us *UserService) UpdateQuestion(id int, title string, question string, poi
 	log.Printf("Update operation completed for question with ID: %d", id)
 	return nil
 }
+
+// make a function that takes questions id and returns all the media associated with it
+func (us *UserService) GetMediaByQuestionId(id int) (map[string][]string, error) {
+	m := make(map[string][]string)
+
+	stmt := fmt.Sprintf(`SELECT path FROM images WHERE parent_question_id = %d`, id)
+	images, err := us.GetMedia(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	m["images"] = images
+
+	stmt = fmt.Sprintf(`SELECT path FROM videos WHERE parent_question_id = %d`, id)
+	videos, err := us.GetMedia(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	m["videos"] = videos
+
+	stmt = fmt.Sprintf(`SELECT path FROM audios WHERE parent_question_id = %d`, id)
+	audios, err := us.GetMedia(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	m["audios"] = audios
+
+	return m, nil
+}
