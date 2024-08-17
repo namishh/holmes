@@ -42,4 +42,6 @@ func SetupRoutes(e *echo.Echo, ah *AuthHandler) {
 	admingroup.GET("/editquestion/delimage/:name", ah.AdminDeleteImage)
 	admingroup.GET("/editquestion/delvideo/:name", ah.AdminDeleteVideo)
 	admingroup.GET("/editquestion/delaudio/:name", ah.AdminDeleteAudio)
+
+	e.GET("/*", RouteNotFoundHandler)
 }

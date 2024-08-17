@@ -25,11 +25,12 @@ func main() {
 	SECRET_KEY := os.Getenv("SECRET")
 	DB_NAME := os.Getenv("DB_NAME")
 
+	e.HTTPErrorHandler = handlers.CustomHTTPErrorHandler
 	// Use Middleware Here
 	e.Use(middleware.Logger())
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(5)))
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(SECRET_KEY))))
-
 	e.Static("/static", "public")
 
 	store, err := database.NewDatabaseStore(DB_NAME)
