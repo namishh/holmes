@@ -466,7 +466,7 @@ func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
 		points := c.FormValue("points")
 		answer := c.FormValue("answer")
 
-		if answer != "" {
+		if answer == "" {
 			answer = question.Answer
 		} else {
 			by, err := bcrypt.GenerateFromPassword([]byte(answer), bcrypt.DefaultCost)

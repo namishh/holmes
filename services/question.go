@@ -196,7 +196,6 @@ func (us *UserService) GetQuestionById(id int) (Question, error) {
 
 func (us *UserService) GetMedia(query string) ([]string, error) {
 	media := make([]string, 0)
-	log.Printf("Query: %s", query)
 	stmt, err := us.UserStore.DB.Prepare(query)
 	if err != nil {
 		return media, err
@@ -267,4 +266,22 @@ func (us *UserService) GetMediaByQuestionId(id int) (map[string][]string, error)
 	m["audios"] = audios
 
 	return m, nil
+}
+
+func (us *UserService) AddPointsToTeam(teamID int, points int) error {
+	query := `
+    UPDATE teams
+    SET points = points + ?
+    WHERE id = ?
+    `
+
+	// Execute the update
+	_, err := us.UserStore.DB.Exec(query, points, teamID)
+	if err != nil {
+		log.Printf("Error adding points to team %d: %v", teamID, err)
+		return err
+	}
+
+	log.Printf("Successfully added %d points to team %d", points, teamID)
+	return nil
 }

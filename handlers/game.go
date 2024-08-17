@@ -3,7 +3,6 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -92,14 +91,29 @@ func (ah *AuthHandler) Question(c echo.Context) error {
 	}
 
 	if c.Request().Method == "POST" {
+		sess, _ := session.Get(auth_sessions_key, c)
+		if auth := sess.Values[user_type]; auth == "admin" {
+			return c.String(http.StatusForbidden, "Admin cannot solve questions")
+		}
+
+		if hasCompleted {
+			return c.String(http.StatusForbidden, "Question already solved")
+		}
+
 		answer := c.FormValue("answer")
-		log.Print(bcrypt.CompareHashAndPassword([]byte(question.Answer), []byte(answer)))
 		if bcrypt.CompareHashAndPassword([]byte(question.Answer), []byte(answer)) == nil {
 			err = ah.UserServices.MarkQuestionAsCompleted(c.Get(user_id_key).(int), lvl)
 			if err != nil {
 				return c.String(http.StatusInternalServerError, fmt.Sprintf("Error Validating: %s", err))
 			}
-
+			err = ah.UserServices.AddPointsToTeam(c.Get(user_id_key).(int), question.Points)
+			if err != nil {
+				return c.String(http.StatusInternalServerError, fmt.Sprintf("Error adding Points: %s", err))
+			}
+			err = ah.UserServices.UpdateTeamLastAnsweredQuestion(c.Get(user_id_key).(int))
+			if err != nil {
+				return c.String(http.StatusInternalServerError, fmt.Sprintf("Error updating time: %s", err))
+			}
 			return c.Redirect(http.StatusFound, "/hunt")
 		}
 

@@ -44,7 +44,9 @@ type AuthService interface {
 	IsQuestionSolvedByTeam(teamID, questionID int) (bool, error)
 	GetMediaByQuestionId(id int) (map[string][]string, error)
 	MarkQuestionAsCompleted(userID, questionID int) error
-
+	AddPointsToTeam(teamID int, points int) error
+UpdateTeamLastAnsweredQuestion(teamID int) error
+	
 	GetHints() ([]services.Hint, error)
 	CreateHint(h services.Hint) error
 	DeleteHint(id int) error

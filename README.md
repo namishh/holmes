@@ -115,8 +115,10 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   - [x] Get all questions
   - [x] Get Question
   - [x] Submit Answer
+  - [x] Update Score
   - [ ] Get Hint
   - [ ] Get Score
+  - [x] End Game
 - [ ] Leaderboard
 - [ ] Error Pages
 - [ ] Host on digital ocean

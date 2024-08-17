@@ -2,6 +2,7 @@ package services
 
 import (
 	"log"
+	"time"
 )
 
 type QuestionWithStatus struct {
@@ -119,4 +120,25 @@ func (us *UserService) IsQuestionSolvedByTeam(teamID, questionID int) (bool, err
 		return false, err
 	}
 	return count > 0, nil
+}
+
+func (us *UserService) UpdateTeamLastAnsweredQuestion(teamID int) error {
+	query := `
+    UPDATE teams
+    SET last_answered_question = ?
+    WHERE id = ?
+    `
+
+	// Get current timestamp
+	currentTime := time.Now()
+
+	// Execute the update
+	_, err := us.UserStore.DB.Exec(query, currentTime, teamID)
+	if err != nil {
+		log.Printf("Error updating last answered question for team %d: %v", teamID, err)
+		return err
+	}
+
+	log.Printf("Update operation completed for team %d at %v", teamID, currentTime)
+	return nil
 }
