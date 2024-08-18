@@ -69,6 +69,17 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   make build
 ```
 
+### Demo
+
+- User Perspective
+
+https://github.com/user-attachments/assets/c227512b-88e7-42fb-ba78-a426bc996ccf
+
+- Admin Perspective
+  
+https://github.com/user-attachments/assets/a4ef2dcd-e13e-410f-9f50-e6fe6fd2bd27
+
+
 
 ### Screenshots
 
