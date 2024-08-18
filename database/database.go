@@ -126,6 +126,20 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 		return fmt.Errorf("Failed to create table: %s", err)
 	}
 
+	stmt = `CREATE TABLE IF NOT EXISTS team_hint_unlocked (
+    team_id INTEGER,
+    hint_id INTEGER,
+    unlocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (team_id, hint_id),
+    FOREIGN KEY (team_id) REFERENCES teams(id),
+    FOREIGN KEY (hint_id) REFERENCES hints(id)
+    );`
+
+	_, err = DB.Exec(stmt)
+	if err != nil {
+		return fmt.Errorf("Failed to create table: %s", err)
+	}
+
 	return nil
 }
 

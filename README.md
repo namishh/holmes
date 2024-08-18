@@ -111,21 +111,20 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   - [x] Hints
     - [x] Add hint
     - [x] Delete hint
-- [ ] Game flow
+- [x] Game flow
   - [x] Get all questions
   - [x] Get Question
   - [x] Submit Answer
   - [x] Update Score
-  - [ ] Get Hint
-  - [ ] Get Score
+  - [x] Get Hint
   - [x] End Game
 - [ ] Leaderboard
-- [ ] Error Pages
+- [x] Error Pages
 - [ ] Host on digital ocean
 - [ ] Extra
   - [ ] Complete the home page
-  - [ ] Rate limiting
+  - [x] Rate limiting
 
-### Aknowledgements
+### Acknowledgements
 
 -  [emarifer/go-echo-templ-htmx](https://github.com/emarifer/go-echo-templ-htmx)

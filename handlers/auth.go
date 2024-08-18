@@ -45,11 +45,15 @@ type AuthService interface {
 	GetMediaByQuestionId(id int) (map[string][]string, error)
 	MarkQuestionAsCompleted(userID, questionID int) error
 	AddPointsToTeam(teamID int, points int) error
-UpdateTeamLastAnsweredQuestion(teamID int) error
-	
+	UpdateTeamLastAnsweredQuestion(teamID int) error
+
 	GetHints() ([]services.Hint, error)
 	CreateHint(h services.Hint) error
 	DeleteHint(id int) error
+	GetHintsByQuestionID(questionID int) ([]services.Hint, error)
+	GetHintById(id int) (string, int, error)
+	HasTeamUnlockedHint(teamID int, hintID int) (bool, error)
+	UnlockHintForTeam(teamID int, hintID int, worth int) error
 
 	GetMedia(query string) ([]string, error)
 	GetIdByPath(path string, table string) (int, error)
@@ -197,7 +201,7 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 		}
 		sess.Save(c.Request(), c.Response())
 
-		return c.Redirect(http.StatusSeeOther, "/")
+		return c.Redirect(http.StatusSeeOther, "/hunt")
 
 	}
 	// isError = false

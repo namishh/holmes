@@ -92,6 +92,7 @@ func (us *UserService) GetHintsByQuestionID(questionID int) ([]Hint, error) {
 
 	return hints, nil
 }
+
 func (us *UserService) DeleteHint(hintID int) error {
 	// SQL query to delete the hint
 	query := "DELETE FROM hints WHERE id = ?"
@@ -104,4 +105,57 @@ func (us *UserService) DeleteHint(hintID int) error {
 	}
 
 	return nil
+}
+
+func (us *UserService) UnlockHintForTeam(teamID int, hintID int, worth int) error {
+	query := `
+    INSERT OR IGNORE INTO team_hint_unlocked (team_id, hint_id)
+    VALUES (?, ?)
+    `
+	_, err := us.UserStore.DB.Exec(query, teamID, hintID)
+	if err != nil {
+		log.Printf("Error unlocking hint %d for team %d: %v", hintID, teamID, err)
+		return err
+	}
+
+	// Deduct the hint's worth from the team's points
+	query = `UPDATE teams SET points = points - ? WHERE id = ?`
+
+	_, err = us.UserStore.DB.Exec(query, worth, teamID)
+	if err != nil {
+		log.Printf("Error deducting team %d: %v", teamID, err)
+		return err
+	}
+
+	return nil
+}
+
+func (us *UserService) HasTeamUnlockedHint(teamID int, hintID int) (bool, error) {
+	query := `
+    SELECT EXISTS(SELECT 1 FROM team_hint_unlocked
+                  WHERE team_id = ? AND hint_id = ?)
+    `
+	var exists bool
+	err := us.UserStore.DB.QueryRow(query, teamID, hintID).Scan(&exists)
+	if err != nil {
+		log.Printf("Error checking if team %d has unlocked hint %d: %v", teamID, hintID, err)
+		return false, err
+	}
+	return exists, nil
+}
+
+func (us *UserService) GetHintById(id int) (string, int, error) {
+	var hint string
+	var worth int
+	query := `SELECT hint, worth FROM hints WHERE id = ?`
+
+	err := us.UserStore.DB.QueryRow(query, id).Scan(&hint, &worth)
+
+	if err != nil {
+		log.Printf("Error querying question with ID %d: %v", id, err)
+		return hint, worth, err
+	}
+
+	log.Printf("Successfully retrieved question with ID: %d", id)
+	return hint, worth, nil
 }

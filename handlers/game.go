@@ -65,6 +65,45 @@ func (ah *AuthHandler) Hunt(c echo.Context) error {
 	))
 }
 
+func (ah *AuthHandler) UnlockHint(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+
+	hastaken, err := ah.UserServices.HasTeamUnlockedHint(c.Get(user_id_key).(int), id)
+	if err != nil {
+		return err
+	}
+
+	hint, worth, err := ah.UserServices.GetHintById(id)
+
+	if !hastaken {
+		err := ah.UserServices.UnlockHintForTeam(c.Get(user_id_key).(int), id, worth)
+		if err != nil {
+			return err
+		}
+	}
+
+	if err != nil {
+		return err
+	}
+
+	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
+	if !ok {
+		return errors.New("invalid type for key 'FROMPROTECTED'")
+	}
+	quizview := hunt.Hint(fromProtected, hastaken, hint)
+	c.Set("ISERROR", false)
+	return renderView(c, hunt.HintIndex(
+		"Hint",
+		c.Get(user_name_key).(string),
+		fromProtected,
+		c.Get("ISERROR").(bool),
+		quizview,
+	))
+}
+
 func (ah *AuthHandler) Question(c echo.Context) error {
 	errs := make(map[string]string)
 	lvl, err := strconv.Atoi(c.Param("id"))
@@ -81,6 +120,11 @@ func (ah *AuthHandler) Question(c echo.Context) error {
 	}
 
 	hasCompleted, err := ah.UserServices.IsQuestionSolvedByTeam(c.Get(user_id_key).(int), lvl)
+	if err != nil {
+		return err
+	}
+
+	hints, err := ah.UserServices.GetHintsByQuestionID(lvl)
 	if err != nil {
 		return err
 	}
@@ -118,7 +162,7 @@ func (ah *AuthHandler) Question(c echo.Context) error {
 		}
 
 		errs["answer"] = "Incorrect Answer"
-		quizview := hunt.Question(fromProtected, question, hasCompleted, media, errs)
+		quizview := hunt.Question(fromProtected, question, hasCompleted, media, errs, hints)
 		c.Set("ISERROR", false)
 		return renderView(c, hunt.QuestionIndex(
 			"Solve",
@@ -129,7 +173,7 @@ func (ah *AuthHandler) Question(c echo.Context) error {
 		))
 	}
 
-	quizview := hunt.Question(fromProtected, question, hasCompleted, media, errs)
+	quizview := hunt.Question(fromProtected, question, hasCompleted, media, errs, hints)
 	c.Set("ISERROR", false)
 	return renderView(c, hunt.QuestionIndex(
 		"Solve",
