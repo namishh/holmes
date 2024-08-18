@@ -72,6 +72,10 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
 
 ### Screenshots
 
+- Home Page 
+
+<img src="https://i.imgur.com/0IE0zAi.png">
+
 - Auth Pages
 
 <img src="https://i.imgur.com/tbKPDpP.png">
@@ -95,6 +99,24 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
 
 <img src="https://i.imgur.com/fWM2z3y.png">
 <img src="https://i.imgur.com/QL5eEmC.png">
+
+- Single Question
+
+<img src="https://i.imgur.com/BXVcmQ1.png">
+<img src="https://i.imgur.com/qShZuKT.png">
+
+- Opened Hint 
+
+<img src="https://i.imgur.com/mJoiwCZ.png">
+
+- Leaderboard
+
+<img src="https://i.imgur.com/z1awEXU.png">
+
+- Error Pages
+
+<img src="https://i.imgur.com/hGTiQWn.png">
+<img src="blob:https://imgur.com/6d1faf60-631a-43c5-87ca-733338f6ef76">
 
 ### Todo
 - [x] Setup the project
