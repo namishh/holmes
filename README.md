@@ -142,10 +142,10 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   - [x] End Game
 - [x] Leaderboard
 - [x] Error Pages
+- [x] Rate limiting
+
+### Future
 - [ ] Host on digital ocean
-- [ ] Extra
-  - [ ] Complete the home page
-  - [x] Rate limiting
 
 ### Acknowledgements
 
