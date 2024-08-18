@@ -1,0 +1,81 @@
+package hunt
+
+import (
+	"github.com/namishh/holmes/services"
+	"github.com/namishh/holmes/views/layouts"
+	"strconv"
+)
+
+templ Leaderboard(fromProtected bool, users []services.LeaderBoardUser, user services.User) {
+	<div class="h-screen w-screen flex flex-col items-center ">
+		if len(users) < 1 {
+			<div class="p-4 text-gray-500">
+				No users available. Bravo, I do not even know how you got here
+			</div>
+		} else {
+			<div class="h-[12rem] w-full p-3" style="background-image: url('/static/banner.jpg');">
+				<div class="flex flex-col text-white justify-center items-center h-full">
+					<h1 class="text-2xl mb-4 md:text-4xl font-bold text-white">Leader<span class="text-blue-400">board.</span></h1>
+					<p>{ user.Username } : { strconv.Itoa(user.Points) }</p>
+				</div>
+			</div>
+			<table class="lg:w-1/2 md:w-2/3 m-4 w-5/6 xl:w-1/3 p-2">
+				<thead class="text-xs text-gray-400 uppercase bg-gray-800">
+					<tr>
+						<th scope="col" class="px-6 py-3">
+							Team
+						</th>
+						<th scope="col" class="px-6 py-3">
+							Score
+						</th>
+						<th scope="col" class="px-6 py-3">
+							Rank
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					for i, user := range users {
+						if i % 2 == 0 {
+							<tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-800">
+								<th scope="col" class="px-6 text-md py-4 font-medium  whitespace-nowrap text-white">
+									{ user.Username }
+								</th>
+								<td class="px-6 text-center py-4 text-white">
+									{ strconv.Itoa(user.Points) }
+								</td>
+								<td class="px-6 text-white text-center py-4 text-blue">
+									{ strconv.Itoa(i + 1) }
+								</td>
+							</tr>
+						} else {
+							<tr class="bg-white border-b dark:bg-gray-900/50 dark:border-gray-800">
+								<th scope="col" class="px-6 text-md py-4 font-medium  whitespace-nowrap text-white">
+									{ user.Username }
+								</th>
+								<td class="px-6 text-center py-4 text-white">
+									{ strconv.Itoa(user.Points) }
+								</td>
+								<td class="px-6 text-white text-center py-4 text-blue">
+									{ strconv.Itoa(i + 1) }
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		}
+	</div>
+}
+
+templ LeaderboardIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+
+) {
+	@layouts.Base(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

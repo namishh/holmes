@@ -54,6 +54,7 @@ type AuthService interface {
 	GetHintById(id int) (string, int, error)
 	HasTeamUnlockedHint(teamID int, hintID int) (bool, error)
 	UnlockHintForTeam(teamID int, hintID int, worth int) error
+	GetLeaderbaord() ([]services.LeaderBoardUser, error)
 
 	GetMedia(query string) ([]string, error)
 	GetIdByPath(path string, table string) (int, error)

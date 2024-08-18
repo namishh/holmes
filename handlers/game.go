@@ -183,3 +183,33 @@ func (ah *AuthHandler) Question(c echo.Context) error {
 		quizview,
 	))
 }
+
+func (ah *AuthHandler) Leaderboard(c echo.Context) error {
+
+	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
+	if !ok {
+		return errors.New("invalid type for key 'FROMPROTECTED'")
+	}
+
+	users, err := ah.UserServices.GetLeaderbaord()
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error fetching Leaderboard: %s", err))
+	}
+
+	user, err := ah.UserServices.CheckUsername(c.Get(user_name_key).(string))
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error fetching you: %s", err))
+	}
+
+	quizview := hunt.Leaderboard(fromProtected, users, user)
+	c.Set("ISERROR", false)
+	return renderView(c, hunt.LeaderboardIndex(
+		"Leaderboard",
+		c.Get(user_name_key).(string),
+		fromProtected,
+		c.Get("ISERROR").(bool),
+		quizview,
+	))
+}

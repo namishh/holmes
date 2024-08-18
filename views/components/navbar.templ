@@ -16,7 +16,7 @@ templ Navbar(username string, fromProtected bool) {
 			<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] rounded-lg mt-[2px]" href="/">Home</a>
 			if fromProtected {
 				<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] rounded-lg" href="/hunt">Hunt</a>
-				<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] rounded-lg" href="/leaderboard">Leaderboard</a>
+				<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] rounded-lg" href="/hunt/leaderboard">Leaderboard</a>
 				<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] mb-[2px] rounded-lg" href="/logout">Logout</a>
 			} else {
 				<a class="link text-sm hover:bg-gray-900 text-white p-2 mx-[2px] rounded-lg" href="/register">Register</a>

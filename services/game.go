@@ -142,3 +142,31 @@ func (us *UserService) UpdateTeamLastAnsweredQuestion(teamID int) error {
 	log.Printf("Update operation completed for team %d at %v", teamID, currentTime)
 	return nil
 }
+
+type LeaderBoardUser struct {
+	Username string
+	Points   int
+}
+
+func (us *UserService) GetLeaderbaord() ([]LeaderBoardUser, error) {
+	stmt := `SELECT name, points FROM teams ORDER BY points DESC, last_answered_question ASC;`
+	rows, err := us.UserStore.DB.Query(stmt)
+	if err != nil {
+		log.Printf("Eror fetching leaderboard")
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []LeaderBoardUser
+
+	for rows.Next() {
+		var user LeaderBoardUser
+		if err := rows.Scan(&user.Username, &user.Points); err != nil {
+			log.Printf("Error scanning completed question: %v", err)
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}

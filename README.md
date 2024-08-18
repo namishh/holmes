@@ -118,7 +118,7 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   - [x] Update Score
   - [x] Get Hint
   - [x] End Game
-- [ ] Leaderboard
+- [x] Leaderboard
 - [x] Error Pages
 - [ ] Host on digital ocean
 - [ ] Extra

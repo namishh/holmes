@@ -36,7 +36,6 @@ func CreateMigrations(DBName string, DB *sql.DB) error {
 	stmt := `CREATE TABLE IF NOT EXISTS teams (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		email VARCHAR(255) NOT NULL,
-    	level INT DEFAULT 0,
     	points INT DEFAULT 0,
 		password VARCHAR(255) NOT NULL,
 		name VARCHAR(255) UNIQUE NOT NULL,

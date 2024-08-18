@@ -112,14 +112,14 @@ templ PanelHome(fromProtected bool, users []services.User, questions []services.
 									<div class="w-full flex justify-between p-3 bg-gray-900/30">
 										<p class="w-1/5">{ team.Username }</p>
 										<p>{ strconv.Itoa(team.ID) } </p>
-										<p>{ strconv.Itoa(team.Level * 1000) } </p>
+										<p>{ strconv.Itoa(team.Points) } </p>
 										<a href={ templ.URL(fmt.Sprintf("/su/deleteteam/%d", team.ID)) } class="bg-red-600 px-3 py-1 rounded-md text-white">Delete</a>
 									</div>
 								} else {
 									<div class="w-full flex justify-between p-3 bg-gray-900">
 										<p class="w-1/5">{ team.Username }</p>
 										<p>{ strconv.Itoa(team.ID) } </p>
-										<p>{ strconv.Itoa(team.Level * 1000) } </p>
+										<p>{ strconv.Itoa(team.Points) } </p>
 										<a href={ templ.URL(fmt.Sprintf("/su/deleteteam/%d", team.ID)) } class="bg-red-600 px-3 py-1 rounded-md text-white">Delete</a>
 									</div>
 								}
