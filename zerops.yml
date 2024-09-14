@@ -6,7 +6,7 @@ zerops:
         - nodejs@20
       buildCommands:
         - go install github.com/a-h/templ/cmd/templ@latest
-        - ./bin/templ generate
+        - ~/go/bin/templ generate
         - npm i tailwind
         - npx tailwind -i ./assets/app.css -o ./public/app.css
         - export ENVIRONMENT="PROD"; go build -o bin/app ./app/
