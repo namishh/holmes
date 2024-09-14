@@ -16,7 +16,6 @@ zerops:
       # after the build succesfully finished
       deployFiles: ./bin/app
 
-    # ==== how to run your application ====
     run:
       # what technology should the runtime
       # container be based on, can be extended
