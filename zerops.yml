@@ -9,7 +9,7 @@ zerops:
         - ./bin/templ generate
         - npm i tailwind
         - npx tailwind -i ./assets/app.css -o ./public/app.css
-        - go build -o bin/app ./app/
+        - export ENVIRONMENT="PROD"; go build -o bin/app ./app/
       deployFiles:
         - ./bin/~/app
         - ./public/

@@ -15,9 +15,11 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if os.Getenv("ENVIRONMENT") == "DEV" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 	// Echo instance
 	e := echo.New()
