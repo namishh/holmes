@@ -1,0 +1,34 @@
+zerops:
+  - setup: golang0
+    # ==== how to build your application ====
+    build:
+      # what technologies should the build
+      # container be based on (can be an array)
+      base: go@1
+
+      # build your application
+      buildCommands:
+        - templ generate
+        - npx tailwind -i ./assets/app.css -o ./public/app.css
+        - go build -o bin/app ./app/
+
+      # select which files / folders to deploy
+      # after the build succesfully finished
+      deployFiles: ./bin/app
+
+    # ==== how to run your application ====
+    run:
+      # what technology should the runtime
+      # container be based on, can be extended
+      # in `run.prepareCommands` using
+      # `zsc install nodejs@20`
+      base: go@1
+
+      # what ports your app listens on
+      # and whether it supports http traffic
+      ports:
+        - port: 6969
+          httpSupport: true
+
+      # how to start your application
+      start: ./bin/app
