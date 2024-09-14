@@ -8,7 +8,8 @@ zerops:
 
       # build your application
       buildCommands:
-        - templ generate
+        - go install github.com/a-h/templ/cmd/templ@latest
+        - ./bin/templ generate
         - npx tailwind -i ./assets/app.css -o ./public/app.css
         - go build -o bin/app ./app/
 
