@@ -1,5 +1,5 @@
 zerops:
-  - setup: golang0
+  - setup: golang1
     build:
       base:
         - go@1
