@@ -1,10 +1,16 @@
 package services
 
 import (
+	"context"
 	"fmt"
-	"log"
-
+	"github.com/google/uuid"
+	"github.com/minio/minio-go/v7"
 	"golang.org/x/crypto/bcrypt"
+	"log"
+	"mime/multipart"
+	"os"
+	"path/filepath"
+	"time"
 )
 
 type Question struct {
@@ -31,6 +37,35 @@ type Audio struct {
 	ID               int    `json:"id"`
 	Path             string `json:"path"`
 	ParentQuestionID int    `json:"parent_question_id"`
+}
+
+func (us *UserService) MakeArray(label string, form *multipart.Form, short string) (list []string, err error) {
+	bucketName := os.Getenv("BUCKET_NAME")
+	files := form.File[label]
+	for _, file := range files {
+		src, err := file.Open()
+		if err != nil {
+			return list, err
+		}
+		defer src.Close()
+
+		u := uuid.New().String()
+		filename := fmt.Sprintf("%s-%s%s", short, u, filepath.Ext(file.Filename))
+
+		_, err = us.MinioClient.PutObject(context.Background(), bucketName, filename, src, file.Size, minio.PutObjectOptions{ContentType: file.Header.Get("Content-Type")})
+		if err != nil {
+			return list, fmt.Errorf("failed to upload file to MinIO: %v", err)
+		}
+
+		fmt.Println(bucketName, filename)
+
+		presignedURL, err := us.MinioClient.PresignedGetObject(context.Background(), bucketName, filename, time.Second*60*60*24*7, nil)
+		if err != nil {
+			return list, fmt.Errorf("failed to generate presigned URL: %v", err)
+		}
+		list = append(list, presignedURL.String())
+	}
+	return list, nil
 }
 
 func (us *UserService) CreateMedia(ID int, images []string, videos []string, audios []string) error {

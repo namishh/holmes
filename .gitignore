@@ -4,6 +4,7 @@ node_modules
 tmp
 public/*.css
 views/**/*.go
+*.db
 views/**/*.txt
 public/IMG-*
 public/VID-*

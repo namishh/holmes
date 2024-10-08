@@ -13,7 +13,7 @@ templ:
 	@templ generate --watch
 
 dev:
-	@./bin/air
+	@~/go/bin/air
 
 
 clean:

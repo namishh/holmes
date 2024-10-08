@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/minio/minio-go/v7"
 	"github.com/namishh/holmes/database"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -15,14 +16,16 @@ type User struct {
 }
 
 type UserService struct {
-	User      User
-	UserStore database.DatabaseStore
+	User        User
+	UserStore   database.DatabaseStore
+	MinioClient *minio.Client
 }
 
-func NewUserService(user User, userStore database.DatabaseStore) *UserService {
+func NewUserService(user User, userStore database.DatabaseStore, mini *minio.Client) *UserService {
 	return &UserService{
-		User:      user,
-		UserStore: userStore,
+		User:        user,
+		UserStore:   userStore,
+		MinioClient: mini,
 	}
 }
 

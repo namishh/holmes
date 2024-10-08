@@ -156,7 +156,7 @@ func (ah *AuthHandler) AdminPageHandler(c echo.Context) error {
 	))
 }
 
-func MakeArray(label string, form *multipart.Form, short string) (list []string, err error) {
+func (ah *AuthHandler) MakeArray(label string, form *multipart.Form, short string) (list []string, err error) {
 	files := form.File[label]
 	for _, file := range files {
 		src, err := file.Open()
@@ -233,15 +233,15 @@ func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 		if err != nil {
 			return err
 		}
-		images, err := MakeArray("images", form, "IMG")
+		images, err := ah.UserServices.MakeArray("images", form, "IMG")
 		if err != nil {
 			return err
 		}
-		videos, err := MakeArray("videos", form, "VID")
+		videos, err := ah.UserServices.MakeArray("videos", form, "VID")
 		if err != nil {
 			return err
 		}
-		audios, err := MakeArray("audios", form, "AUD")
+		audios, err := ah.UserServices.MakeArray("audios", form, "AUD")
 		if err != nil {
 			return err
 		}
@@ -446,15 +446,15 @@ func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
 		if err != nil {
 			return err
 		}
-		images, err := MakeArray("images", form, "IMG")
+		images, err := ah.UserServices.MakeArray("images", form, "IMG")
 		if err != nil {
 			return err
 		}
-		videos, err := MakeArray("videos", form, "VID")
+		videos, err := ah.UserServices.MakeArray("videos", form, "VID")
 		if err != nil {
 			return err
 		}
-		audios, err := MakeArray("audios", form, "AUD")
+		audios, err := ah.UserServices.MakeArray("audios", form, "AUD")
 		if err != nil {
 			return err
 		}

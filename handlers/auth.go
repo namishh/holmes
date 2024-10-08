@@ -14,6 +14,7 @@ import (
 	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/pages/auth"
 	"golang.org/x/crypto/bcrypt"
+	"mime/multipart"
 )
 
 const auth_key string = "auth_key"
@@ -35,6 +36,7 @@ type AuthService interface {
 
 	GetAllQuestions() ([]services.Question, error)
 	DeleteQuestion(id int) error
+	MakeArray(label string, form *multipart.Form, short string) (list []string, err error)
 	CreateQuestion(q services.Question, images []string, video []string, audio []string) error
 	CreateMedia(ID int, images []string, videos []string, audios []string) error
 	GetQuestionById(id int) (services.Question, error)
