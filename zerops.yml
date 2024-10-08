@@ -1,24 +1,27 @@
 zerops:
-  - setup: golang0
+  - setup: holmes
     build:
-      os: ubuntu
       base:
         - go@1
         - nodejs@20
       prepareCommands:
-        - sudo apt-get install sqlite3 gcc -y
+        - sudo apk add gcc musl-dev
+        - go install github.com/a-h/templ/cmd/templ@v0.2.778
       buildCommands:
-        - go install github.com/a-h/templ/cmd/templ@latest
-        - ~/go/bin/templ generate
         - npm install
+        - ~/go/bin/templ generate
         - npx tailwind -i ./assets/app.css -o ./public/app.css
-        - go build -o bin/app ./app/
+        - go build -ldflags='-s -w -extld gcc -extldflags "-static"' -o bin/app ./app/
       deployFiles:
         - ./bin/~/app
         - ./public/
+      envVariables:
+        CGO_ENABLED: 1
+        ENVIRONMENT: prod
     run:
       base: go@1
       ports:
         - port: 4200
           httpSupport: true
       start: ./app
+
