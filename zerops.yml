@@ -1,5 +1,5 @@
 zerops:
-  - setup: holmes
+  - setup: golang0 
     build:
       base:
         - go@1
