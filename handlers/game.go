@@ -8,6 +8,7 @@ import (
 
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/pages"
 	"github.com/namishh/holmes/views/pages/hunt"
 	"golang.org/x/crypto/bcrypt"
@@ -197,7 +198,16 @@ func (ah *AuthHandler) Leaderboard(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error fetching Leaderboard: %s", err))
 	}
 
-	user, err := ah.UserServices.CheckUsername(c.Get(user_name_key).(string))
+	user := services.User{}
+
+	if c.Get(user_name_key).(string) == "admin" {
+		user = services.User{ID: 0, Username: "Admin", Points: 0}
+	} else {
+		user, err = ah.UserServices.CheckUsername(c.Get(user_name_key).(string))
+		if err != nil {
+			return c.String(http.StatusInternalServerError, fmt.Sprintf("Error fetching you: %s", err))
+		}
+	}
 
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error fetching you: %s", err))

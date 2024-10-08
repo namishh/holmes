@@ -15,18 +15,18 @@ templ PanelHints(fromProtected bool, hints []services.Hint) {
 				<img src="/static/hints.svg" class="h-6"/>
 				<h1 class="text-2xl font-bold">Hints</h1>
 			</div>
-			<a href="/su/hints/new" class="px-6 py-2 bg-blue-400 text-black rounded-lg">Add New</a>
+			<a href="/su/hints/new" class="px-6 py-2 bg-white text-black rounded-lg">Add New</a>
 		</div>
 		if len(hints) < 1 {
-			<div class="grow bg-gray-900 rounded-xl overflow-scroll-y flex justify-center items-center">
-				<h1 class="text-2xl text-gray-500">No hints available</h1>
+			<div class="grow bg-neutral-900 rounded-xl overflow-scroll-y flex justify-center items-center">
+				<h1 class="text-2xl text-neutral-500">No hints available</h1>
 			</div>
 		} else {
 			<div class="grow overflow-scroll-y ">
 				<div class="flex flex-wrap">
 					for _, hint := range hints {
 						<div class="md:w-1/2 w-full xl:w-1/4 p-2">
-							<div class="p-4 w-full bg-gray-900 rounded-xl flex flex-col gap-2">
+							<div class="p-4 w-full bg-neutral-900 rounded-xl flex flex-col gap-2">
 								<div class="flex justify-between items-center">
 									<h1 class="text-xl font-bold">{ hint.Hint }</h1>
 									<a href={ templ.URL(fmt.Sprintf("/su/hints/delete/%d", hint.ID)) } class="px-4 py-[4px] bg-red-400 text-black rounded-lg">Delete</a>

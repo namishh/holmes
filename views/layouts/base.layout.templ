@@ -19,13 +19,13 @@ templ Base(title, username string, fromProtected, isError bool) {
 			<title>Holmes | { title }</title>
 			<script src="https://unpkg.com/htmx.org@2.0.1"></script>
 		</head>
-		<body class="bg-gray-950" hx-boost="true">
+		<body class="bg-neutral-950" hx-boost="true">
 			<header>
 				if !isError {
 					@components.Navbar(username, fromProtected)
 				}
 			</header>
-			<main>
+			<main class="z-[10]">
 				{ children... }
 			</main>
 		</body>

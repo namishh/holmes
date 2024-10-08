@@ -7,11 +7,11 @@ templ Hint(fromProtected bool, hasTaken bool, hint string) {
 		<div class="flex flex-col text-center p-4">
 			<p class="text-xl">{ hint }</p>
 			if hasTaken {
-				<div class="p-4 user-select-none text-center text-gray-500">
+				<div class="p-4 user-select-none text-center text-neutral-500">
 					You have already unlocked this hint, points will not be dedcuted further for futher accesses.
 				</div>
 			}
-			<a href="/hunt" class="mt-4 text-sm text-blue-400 underline">Go back</a>
+			<a href="/hunt" class="mt-4 text-sm text-neutral-400 underline">Go back</a>
 		</div>
 	</div>
 }

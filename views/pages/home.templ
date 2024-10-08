@@ -4,14 +4,24 @@ import "github.com/namishh/holmes/views/layouts"
 
 templ Home(fromProtected bool) {
 	<div class="h-screen w-screen flex justify-center items-center">
-		<div class="container w-full lg:w-1/2 p-8 lg:p-0 flex flex-col items-center">
-			<p class="bg-gray-800  px-4 lg:px-8 py-2 mb-4 rounded-3xl text-white">this is a <span class="text-blue-400">fully editable</span> template btw.</p>
-			<h1 class="text-center text-2xl lg:text-4xl text-white leading-[2rem] lg:leading-[3rem]">The <span class="text-blue-400">Easy</span>, <span class="text-blue-400">Fast</span> and <span class="text-blue-400">Reliable</span> Starter to Make Cryptic Hunts<br/> Supercharged with <span class="italic text-blue-400 font-bold"><a href="https://go.dev/">Golang.</a></span></h1>
-			<p class="text-lg text-center text-white mt-3">No bullshit, only essentials required starter kit to make your own small cryptic hunt event.<br/>Powered by <a href="https://echo.labstack.com" class="text-blue-400">Echo</a>, <a href="https://templ.guide/" class="text-blue-400">Templ</a> and ol' reliable <span class="text-blue-400">sqlite</span>.</p>
-			<div class="flex mt-6 justify-center gap-6">
-				<a href="https://github.com/namishh/holmes" class="bg-white text-black px-8 py-2 rounded-lg">Code</a>
-				<a href="https://x.com/namishh_" class="bg-blue-400 text-black px-8 py-2 rounded-lg">Follow The Author</a>
-			</div>
+          <div
+      class="absolute inset-0 h-full w-full bg-neutral-950 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+    ></div>
+
+		<div class="container w-full lg:w-1/2 p-8 lg:p-0 flex flex-col justify-center items-center">
+      <div class="relative">
+        <h1 class="text-center z-[10] md:text-[4rem] text-[3rem] lg:text-[6rem] my-8 font-black text-white leading-[2rem] lg:leading-[3rem]">HOLMES</h1>
+        <img src="/static/sparkles.png" class="absolute -top-4 -right-4 h-6 md:h-8 lg:h-10">
+      </div>
+      <p class="z-[10] self-right text-white text-right">a product by the <a href="https://silicobattles.in" class="text-neutral-400 underline">silico team </a></p>
+      <div class="mt-8 z-[10] flex gap-4 justify-center items-center">
+        <a href="https://github.com/namishh/holmes" class="text-black bg-white p-2 md:text-sm text-xs rounded-md transition hover:bg-neutral-200 hover:rounded-xl">Source Code</a>
+        if fromProtected {
+        <a href="/hunt" class="text-white bg-neutral-900 border-2 border-neutral-700 p-2 md:text-sm text-xs rounded-md transition hover:bg-neutral-800 hover:rounded-xl">The Hunt</a>
+        } else {
+        <a href="/login" class="text-white bg-neutral-900 border-2 border-neutral-700 p-2 md:text-sm text-xs rounded-md transition hover:bg-neutral-800 hover:rounded-xl">Sign In</a>
+        }
+      </div>
 		</div>
 	</div>
 }
