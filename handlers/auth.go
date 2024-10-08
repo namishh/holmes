@@ -230,12 +230,10 @@ func (ah *AuthHandler) RegisterHandler(c echo.Context) error {
 	}
 
 	if c.Request().Method == "POST" {
-		// Validating data here
 		email := c.FormValue("email")
 		password := c.FormValue("password")
 		username := c.FormValue("username")
 
-		// check if email is valid
 		if !valid(email) {
 			errs["email"] = "Invalid email address"
 			c.Set("ISERROR", true)
@@ -243,7 +241,7 @@ func (ah *AuthHandler) RegisterHandler(c echo.Context) error {
 
 		_, err := ah.UserServices.CheckEmail(email)
 		if err == nil || username == "admin" {
-			errs["email"] = "Account with this email already exists"
+			errs["username"] = "Nuh uh, nice try being the admin"
 			c.Set("ISERROR", true)
 		}
 
