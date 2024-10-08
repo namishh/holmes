@@ -3,14 +3,6 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"io"
-	"log"
-	"mime/multipart"
-	"net/http"
-	"os"
-	"strconv"
-
-	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -18,6 +10,10 @@ import (
 	"github.com/namishh/holmes/views/pages/auth"
 	"github.com/namishh/holmes/views/pages/panel"
 	"golang.org/x/crypto/bcrypt"
+	"log"
+	"net/http"
+	"os"
+	"strconv"
 )
 
 func (ah *AuthHandler) adminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
