@@ -156,32 +156,6 @@ func (ah *AuthHandler) AdminPageHandler(c echo.Context) error {
 	))
 }
 
-func (ah *AuthHandler) MakeArray(label string, form *multipart.Form, short string) (list []string, err error) {
-	files := form.File[label]
-	for _, file := range files {
-		src, err := file.Open()
-		if err != nil {
-			return list, err
-		}
-		defer src.Close()
-		u := uuid.New().String()
-		filename := fmt.Sprintf("./public/%s-%s", short, u)
-		finalurl := fmt.Sprintf("/static/%s-%s", short, u)
-		list = append(list, finalurl)
-		dst, err := os.Create(filename)
-		if err != nil {
-			return list, err
-		}
-		defer dst.Close()
-		if _, err = io.Copy(dst, src); err != nil {
-			return list, err
-		}
-	}
-
-	return list, err
-
-}
-
 func (ah *AuthHandler) AdminQuestionHandler(c echo.Context) error {
 	errs := make(map[string]string)
 	fromProtected, ok := c.Get("FROMPROTECTED").(bool)
