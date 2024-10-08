@@ -1,21 +1,23 @@
 zerops:
-  - setup: golang1
+  - setup: golang0
     build:
+      os: ubuntu
       base:
         - go@1
         - nodejs@20
+      prepareCommands:
+        - sudo apt-get install sqlite3 gcc -y
       buildCommands:
         - go install github.com/a-h/templ/cmd/templ@latest
-        - ~/go/bin/templ generate
-        - npm i tailwind
+        - ./bin/templ generate
         - npx tailwind -i ./assets/app.css -o ./public/app.css
-        - export ENVIRONMENT="PROD"; go build -o bin/app ./app/
+        - go build -o bin/app ./app/
       deployFiles:
         - ./bin/~/app
         - ./public/
     run:
       base: go@1
       ports:
-        - port: 4200
+        - port: 6969
           httpSupport: true
       start: ./app
