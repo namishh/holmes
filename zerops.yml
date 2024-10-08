@@ -10,7 +10,7 @@ zerops:
       buildCommands:
         - go install github.com/a-h/templ/cmd/templ@latest
         - ~/go/bin/templ generate
-        - npm i
+        - npm install
         - npx tailwind -i ./assets/app.css -o ./public/app.css
         - go build -o bin/app ./app/
       deployFiles:
