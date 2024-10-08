@@ -21,4 +21,4 @@ zerops:
       ports:
         - port: 6969
           httpSupport: true
-      start: ./app
+      start: ./bin/app
