@@ -19,6 +19,6 @@ zerops:
     run:
       base: go@1
       ports:
-        - port: 6969
+        - port: 4200
           httpSupport: true
       start: ./bin/app
