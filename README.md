@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white"> <img src="https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white"> <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white"> <img src="https://img.shields.io/badge/DigitalOcean-%230167ff.svg?style=for-the-badge&logo=digitalOcean&logoColor=white">
+<img src="https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white"> <img src="https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white"> <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white"> <img src="https://raw.githubusercontent.com/zeropsio/recipe-shared-assets/080df0587759a1692ade5e693509ce49fd5c5870/zerops-shield.svg">
 
 </div>
 
@@ -154,10 +154,9 @@ https://github.com/user-attachments/assets/a4ef2dcd-e13e-410f-9f50-e6fe6fd2bd27
 - [x] Leaderboard
 - [x] Error Pages
 - [x] Rate limiting
-
-### Future
-- [ ] Host on digital ocean
+- [x] Hosted on Zerops
 
 ### Acknowledgements
 
 -  [emarifer/go-echo-templ-htmx](https://github.com/emarifer/go-echo-templ-htmx)
+-  [zerops](https://zerops.io) for the cheap af hosting and object storage.
