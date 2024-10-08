@@ -1,4 +1,4 @@
-![header](https://i.imgur.com/3EIbYcO.png)
+![header](https://i.imgur.com/wht7eCr.png)
 
 <div align="center">
 
@@ -51,6 +51,19 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   npm i
 ```
 
+- Fill in the `.env` file
+
+```env 
+DB_NAME="database.db"
+SECRET=""
+ADMIN_PASS="holmes"
+ENVIRONMENT="DEV"
+BUCKET_NAME="xxx"
+BUCKET_ENDPOINT="xxx.xx.xxx"
+BUCKET_ACCESSKEY="xxx-xxxxxxxxxxxxxxx"
+BUCKET_SECRETKEY="xxxxxxxxxxxxx"
+```
+
 - Start the server
 
 ```bash
@@ -69,65 +82,54 @@ A simplistic powerful template / starter kit for making your own cryptic / scave
   make build
 ```
 
-### Demo
-
-- User Perspective
-
-https://github.com/user-attachments/assets/c227512b-88e7-42fb-ba78-a426bc996ccf
-
-- Admin Perspective
-  
-https://github.com/user-attachments/assets/a4ef2dcd-e13e-410f-9f50-e6fe6fd2bd27
-
-
 
 ### Screenshots
 
 - Home Page 
 
-<img src="https://i.imgur.com/0IE0zAi.png">
+<img src="https://i.imgur.com/sXEpJrh.png">
 
 - Auth Pages
 
-<img src="https://i.imgur.com/tbKPDpP.png">
-<img src="https://i.imgur.com/TSMiuCG.png">
-<img src="https://i.imgur.com/uoidEFB.png">
+<img src="https://i.imgur.com/5L8OnaH.png">
+<img src="https://i.imgur.com/Qsdiifl.png">
+<img src="https://i.imgur.com/hW2oJq8.png">
 
 - Admin Panel
 
-<img src="https://i.imgur.com/48Vrz7j.png">
+<img src="https://i.imgur.com/m87qXdv.png">
 
 - All the questions
 
-<img src="https://i.imgur.com/r4oROL4.png">
+<img src="https://i.imgur.com/82IJ6qC.png">
 
 - Questions
 
-<img src="https://i.imgur.com/08huRR2.png">
-<img src="https://i.imgur.com/AQRfR9a.png">
+<img src="https://i.imgur.com/0Q7v31r.png">
+<img src="https://i.imgur.com/GJRdpmv.png">
 
 - Hints
 
-<img src="https://i.imgur.com/fWM2z3y.png">
-<img src="https://i.imgur.com/QL5eEmC.png">
+<img src="https://i.imgur.com/c89NvH9.png">
+<img src="https://i.imgur.com/YvgrxDi.png">
 
 - Single Question
 
-<img src="https://i.imgur.com/BXVcmQ1.png">
-<img src="https://i.imgur.com/qShZuKT.png">
+<img src="https://i.imgur.com/ijS1lgD.png">
+<img src="https://i.imgur.com/w9axYGy.png">
 
 - Opened Hint 
 
-<img src="https://i.imgur.com/mJoiwCZ.png">
+<img src="https://i.imgur.com/exJicUs.png">
 
 - Leaderboard
 
-<img src="https://i.imgur.com/z1awEXU.png">
+<img src="https://i.imgur.com/EhlDYx7.png">
 
 - Error Pages
 
-<img src="https://i.imgur.com/hGTiQWn.png">
-<img src="blob:https://imgur.com/6d1faf60-631a-43c5-87ca-733338f6ef76">
+<img src="https://i.imgur.com/hFF6u05.png">
+<img src="https://i.imgur.com/snKUvK9.png">
 
 ### Todo
 - [x] Setup the project
