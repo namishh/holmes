@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -22,7 +21,6 @@ func initMinioClient() (*minio.Client, error) {
 	accessKeyID := os.Getenv("BUCKET_ACCESSKEY")
 	secretAccessKey := os.Getenv("BUCKET_SECRETKEY")
 	useSSL := true
-	fmt.Println(endpoint, accessKeyID, secretAccessKey)
 	minioClient, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
 		Secure: useSSL,
@@ -55,8 +53,27 @@ func main() {
 	e.HTTPErrorHandler = handlers.CustomHTTPErrorHandler
 
 	e.Use(middleware.Logger())
-	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(5)))
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(SECRET_KEY))))
+
+	if os.Getenv("ENVIRONMENT") == "DEV" {
+		e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+			TokenLookup:    "form:_csrf",
+			CookieName:     "_csrf",
+			CookiePath:     "/",
+			CookieHTTPOnly: true,
+			CookieSecure:   false,
+		}))
+	} else {
+		e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+			TokenLookup:    "form:_csrf",
+			CookieName:     "_csrf",
+			CookiePath:     "/",
+			CookieHTTPOnly: true,
+			CookieSecure:   true,
+		}))
+	}
+
 	e.Static("/static", "public")
 
 	store, err := database.NewDatabaseStore(DB_NAME)

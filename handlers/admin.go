@@ -52,7 +52,7 @@ func (ah *AuthHandler) adminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func (ah *AuthHandler) AdminHandler(c echo.Context) error {
-
+	csrfToken := c.Get("csrf").(string)
 	sess, _ := session.Get(auth_sessions_key, c)
 	if user, _ := sess.Values[user_type].(string); user == "admin" {
 		return c.Redirect(http.StatusSeeOther, "/su")
@@ -70,7 +70,7 @@ func (ah *AuthHandler) AdminHandler(c echo.Context) error {
 			c.Set("ISERROR", true)
 			errs["pass"] = "Incorrect Password"
 
-			adminLoginView := auth.AdminLogin(fromProtected, errs)
+			adminLoginView := auth.AdminLogin(csrfToken, errs)
 			c.Set("ISERROR", false)
 			return renderView(c, auth.AdminLoginIndex(
 				"Admin Panel",
@@ -111,7 +111,7 @@ func (ah *AuthHandler) AdminHandler(c echo.Context) error {
 
 	//sess, _ := session.Get(auth_sessions_key, c)
 	// isError = false
-	adminLoginView := auth.AdminLogin(fromProtected, errs)
+	adminLoginView := auth.AdminLogin(csrfToken, errs)
 	c.Set("ISERROR", false)
 	return renderView(c, auth.AdminLoginIndex(
 		"Admin Panel",
