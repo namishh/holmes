@@ -74,7 +74,7 @@ BUCKET_SECRETKEY="xxxxxxxxxxxxx"
   make css
 
   ## run the server
-  make dev
+  export ENVIRONMENT="DEV" ; make dev
 ```
 
 - To build the project
