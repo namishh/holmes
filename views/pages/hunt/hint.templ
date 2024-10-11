@@ -5,9 +5,9 @@ import "github.com/namishh/holmes/views/layouts"
 templ Hint(fromProtected bool, hasTaken bool, hint string) {
 	<div class="h-screen w-screen flex flex-col justify-center text-white items-center ">
 		<div class="flex flex-col text-center p-4">
-			<p class="text-xl">{ hint }</p>
+			<p class="text-xl text-wrap">{ hint }</p>
 			if hasTaken {
-				<div class="p-4 user-select-none text-center text-neutral-500">
+				<div class="p-4 user-select-none text-wrap text-center text-neutral-500">
 					You have already unlocked this hint, points will not be dedcuted further for futher accesses.
 				</div>
 			}
