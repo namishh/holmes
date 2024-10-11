@@ -9,7 +9,7 @@ import (
 
 templ Hunt(fromProtected bool, questions []services.QuestionWithStatus, hasCompleted bool) {
 	<div class="min-h-screen md:h-screen w-screen flex flex-col items-center justify-center">
-			<div class="h-[20rem] md:h-[12rem] w-full p-3 background-cover" style="background-image: linear-gradient(to right, #000000dd, #000000aa) ,url('/static/banner.jpg'); background-size: cover;">
+			<div class="h-[20rem] w-full p-3 background-cover" style="background-image: linear-gradient(to right, #000000dd, #000000aa) ,url('/static/banner.jpg'); background-size: cover;">
 			<div class="flex justify-center items-center h-full">
 				<h1 class="text-3xl md:text-4xl font-bold text-white">Cryptic <span class="text-semibold">Hunt.</span></h1>
 			</div>
@@ -19,7 +19,7 @@ templ Hunt(fromProtected bool, questions []services.QuestionWithStatus, hasCompl
 				No questions available.
 			</div>
 		} else {
-      <div class="relative w-full min-h-full flex flex-col justify-center items-center">
+      <div class="relative w-full h-full flex flex-col justify-center items-center">
               <div
       class="absolute inset-0 h-full  w-full bg-neutral-950 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
     ></div>

@@ -13,7 +13,7 @@ templ Leaderboard(fromProtected bool, users []services.LeaderBoardUser, user ser
 				No users available. Bravo, I do not even know how you got here
 			</div>
 		} else {
-			<div class="h-[12rem] w-full p-3 background-cover" style="background-image: linear-gradient(to right, #000000dd, #000000aa) ,url('/static/banner.jpg'); background-size: cover;">
+			<div class="h-[20rem] w-full p-3 background-cover" style="background-image: linear-gradient(to right, #000000dd, #000000aa) ,url('/static/banner.jpg'); background-size: cover;">
 				<div class="flex flex-col text-white justify-center items-center h-full">
 					<h1 class="text-2xl mb-4 md:text-4xl font-bold text-white">Leader<span class="font-semibold">board.</span></h1>
 					<p>{ user.Username } : { strconv.Itoa(user.Points) }</p>
