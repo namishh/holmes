@@ -1,0 +1,25 @@
+package hunt
+
+import "github.com/namishh/holmes/views/layouts"
+
+templ OutOfPoints() {
+	<div class="h-screen w-screen flex flex-col justify-center text-white items-center ">
+		<div class="flex flex-col text-center p-4">
+			<p class="text-xl text-wrap">You do not have enough points to take the hint!</p>
+			<a href="/hunt" class="mt-4 text-sm text-neutral-400 underline">Go back</a>
+		</div>
+	</div>
+}
+
+templ OutOfPointsIndex(
+	title,
+	username string,
+	fromProtected bool,
+	isError bool,
+	cmp templ.Component,
+
+) {
+	@layouts.Base(title, username, fromProtected, isError) {
+		@cmp
+	}
+}

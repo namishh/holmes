@@ -82,7 +82,16 @@ func (ah *AuthHandler) UnlockHint(c echo.Context) error {
 	user, _ := ah.UserServices.CheckUsername(c.Get(user_name_key).(string))
 
 	if user.Points < worth {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Not enough points")
+		quizview := hunt.OutOfPoints()
+		c.Set("ISERROR", true)
+		fromProtected, _ := c.Get("FROMPROTECTED").(bool)
+		return renderView(c, hunt.OutOfPointsIndex(
+			"Hint",
+			c.Get(user_name_key).(string),
+			fromProtected,
+			c.Get("ISERROR").(bool),
+			quizview,
+		))
 	}
 
 	if !hastaken {
