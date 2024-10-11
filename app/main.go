@@ -56,24 +56,6 @@ func main() {
 	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(SECRET_KEY))))
 
-	if os.Getenv("ENVIRONMENT") == "DEV" {
-		e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-			TokenLookup:    "form:_csrf",
-			CookieName:     "_csrf",
-			CookiePath:     "/",
-			CookieHTTPOnly: true,
-			CookieSecure:   false,
-		}))
-	} else {
-		e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-			TokenLookup:    "form:_csrf",
-			CookieName:     "_csrf",
-			CookiePath:     "/",
-			CookieHTTPOnly: true,
-			CookieSecure:   true,
-		}))
-	}
-
 	e.Static("/static", "public")
 
 	store, err := database.NewDatabaseStore(DB_NAME)

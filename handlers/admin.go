@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/namishh/holmes/services"
 	"github.com/namishh/holmes/views/pages/auth"
 	"github.com/namishh/holmes/views/pages/panel"
@@ -15,6 +16,16 @@ import (
 	"os"
 	"strconv"
 )
+
+func csrfMiddleware() echo.MiddlewareFunc {
+	return middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "form:_csrf",
+		CookieName:     "_csrf",
+		CookiePath:     "/",
+		CookieHTTPOnly: true,
+		CookieSecure:   true, // Set to true if using HTTPS
+	})
+}
 
 func (ah *AuthHandler) adminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
