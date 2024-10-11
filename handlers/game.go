@@ -79,6 +79,12 @@ func (ah *AuthHandler) UnlockHint(c echo.Context) error {
 
 	hint, worth, err := ah.UserServices.GetHintById(id)
 
+	user, _ := ah.UserServices.CheckUsername(c.Get(user_name_key).(string))
+
+	if user.Points < worth {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Not enough points")
+	}
+
 	if !hastaken {
 		err := ah.UserServices.UnlockHintForTeam(c.Get(user_id_key).(int), id, worth)
 		if err != nil {
