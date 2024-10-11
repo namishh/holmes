@@ -40,7 +40,7 @@ templ Question(fromProtected bool, qn services.Question, hasCompleted bool, medi
 					}
 					if len(qn.Question) > 0 {
 						<h1 class="text-xl md:text-2xl mt-8 text-neutral-400 font-bold">Prompt: </h1>
-						<p class="text-lg md:text-xl mt-3 text-wrap whitespace-pre">{ qn.Question }</p>
+						<p class="text-lg md:text-xl mt-3 text-wrap whitespace-pre-wrap">{ qn.Question }</p>
 					}
 					if len(media["images"]) > 0 || len(media["videos"]) > 0 || len(media["audios"]) > 0 {
 						<h1 class="text-xl md:text-2xl mt-8 text-neutral-400 font-bold">Media: </h1>
