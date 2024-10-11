@@ -35,7 +35,7 @@ func (us *UserService) CreateUser(u User) error {
 		return err
 	}
 
-	stmt := `INSERT INTO teams (email, password, name) VALUES ($1, $2, $3)`
+	stmt := `INSERT INTO teams (email, password, name, points) VALUES ($1, $2, $3, 1000)`
 
 	_, err = us.UserStore.DB.Exec(stmt, u.Email, string(hashedPassword), u.Username)
 	return err
