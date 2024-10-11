@@ -13,7 +13,7 @@ templ:
 	@templ generate --watch
 
 dev:
-	@~/go/bin/air
+	@export ENVIRONMENT="dev" ; ~/go/bin/air
 
 
 clean:
