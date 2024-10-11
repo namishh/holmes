@@ -50,12 +50,12 @@ templ PanelEditQuestion(fromProtected bool, errors map[string]string, inputs map
 			</div>
 			<div class="py-[1px] bg-neutral-800 my-3 px-12"></div>
 			<div class="flex flex-col my-6">
-				if len(media["images"]) > 0 {
+				if len(media["limages"]) > 0 {
 					<div class="flex flex-wrap gap-3 mb-10">
-						for _, img := range media["images"] {
+						for i, img := range media["limages"] {
 							<div class="group relative">
-								<a class="group-hover:opacity-100 transition opacity-0 absolute top-2 right-2 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delimage/%s", strings.ReplaceAll(img, "/static/", ""))) }>trash</a>
-								<img class="h-32 transition group-hover:opacity-100 rounded-lg opacity-40" src={ img }/>
+								<a class="group-hover:opacity-100 transition opacity-0 absolute top-2 right-2 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delimage/%s", img)) }>del</a>
+								<img class="h-32 transition group-hover:opacity-100 rounded-lg opacity-40" src={ media["images"][i] }/>
 							</div>
 						}
 					</div>
@@ -68,13 +68,13 @@ templ PanelEditQuestion(fromProtected bool, errors map[string]string, inputs map
 			</div>
 			<div class="py-[1px] bg-neutral-800 my-3 px-12"></div>
 			<div class="flex flex-col my-6">
-				if len(media["audios"]) > 0 {
+				if len(media["laudios"]) > 0 {
 					<div class="flex flex-wrap gap-3 mb-10">
-						for _, img := range media["audios"] {
+						for i, aud:= range media["laudios"] {
 							<div class="group relative">
-								<a class="group-hover:opacity-100 transition text-sm opacity-0 absolute top-0 right-0 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delaudio/%s", strings.ReplaceAll(img, "/static/", ""))) }>trash</a>
+								<a class="group-hover:opacity-100 transition text-sm opacity-0 absolute top-0 right-0 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delaudio/%s", aud)) }>trash</a>
 								<audio controls>
-									<source src={ img } type="audio/mpeg"/>
+									<source src={ media["audios"][i] } type="audio/mpeg"/>
 									Your browser does not support the audio element.
 								</audio>
 							</div>
@@ -89,12 +89,12 @@ templ PanelEditQuestion(fromProtected bool, errors map[string]string, inputs map
 			</div>
 			<div class="py-[1px] bg-neutral-800 my-3 px-12"></div>
 			<div class="flex flex-col my-6">
-				if len(media["videos"]) > 0 {
+				if len(media["lvideos"]) > 0 {
 					<div class="flex flex-wrap gap-3 mb-10">
-						for _, img := range media["videos"] {
+						for i, vid := range media["lvideos"] {
 							<div class="group relative">
-								<a class="group-hover:opacity-100 transition opacity-0 absolute top-2 right-2 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delvideo/%s", strings.ReplaceAll(img, "/static/", ""))) }>trash</a>
-								<video class="h-32 transition group-hover:opacity-100 rounded-lg opacity-40" src={ img }></video>
+								<a class="group-hover:opacity-100 transition opacity-0 absolute top-2 right-2 bg-red-500 p-2 rounded-xl" href={ templ.URL(fmt.Sprintf("/su/editquestion/delvideo/%s", vid)) }>trash</a>
+								<video class="h-32 transition group-hover:opacity-100 rounded-lg opacity-40" src={ media["videos"][i] }></video>
 							</div>
 						}
 					</div>

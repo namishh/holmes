@@ -421,6 +421,10 @@ func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
 	media["videos"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT path FROM videos where parent_question_id = %d", t))
 	media["audios"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT path FROM audios where parent_question_id = %d", t))
 
+	media["limages"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT id FROM images where parent_question_id = %d", t))
+	media["lvideos"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT id FROM videos where parent_question_id = %d", t))
+	media["laudios"], err = ah.UserServices.GetMedia(fmt.Sprintf("SELECT id FROM audios where parent_question_id = %d", t))
+
 	if c.Request().Method == "POST" {
 
 		form, err := c.MultipartForm()
@@ -501,8 +505,7 @@ func (ah *AuthHandler) AdminEditQuestionHandler(c echo.Context) error {
 
 func (ah *AuthHandler) AdminDeleteImage(c echo.Context) error {
 	qid := c.Param("name")
-	qid = fmt.Sprintf("/static/%s", qid)
-	n, err := ah.UserServices.GetIdByPath(qid, "images")
+	n, err := strconv.Atoi(qid)
 	if err != nil {
 		return echo.NewHTTPError(
 			echo.ErrNotFound.Code,
@@ -517,8 +520,7 @@ func (ah *AuthHandler) AdminDeleteImage(c echo.Context) error {
 
 func (ah *AuthHandler) AdminDeleteAudio(c echo.Context) error {
 	qid := c.Param("name")
-	qid = fmt.Sprintf("/static/%s", qid)
-	n, err := ah.UserServices.GetIdByPath(qid, "audios")
+	n, err := strconv.Atoi(qid)
 	if err != nil {
 		return echo.NewHTTPError(
 			echo.ErrNotFound.Code,
@@ -533,8 +535,7 @@ func (ah *AuthHandler) AdminDeleteAudio(c echo.Context) error {
 
 func (ah *AuthHandler) AdminDeleteVideo(c echo.Context) error {
 	qid := c.Param("name")
-	qid = fmt.Sprintf("/static/%s", qid)
-	n, err := ah.UserServices.GetIdByPath(qid, "videos")
+	n, err := strconv.Atoi(qid)
 	if err != nil {
 		return echo.NewHTTPError(
 			echo.ErrNotFound.Code,
