@@ -19,7 +19,7 @@ func (us *UserService) GetAllQuestionsWithStatus(userID int) ([]QuestionWithStat
            CASE WHEN tcq.team_id IS NOT NULL THEN 1 ELSE 0 END as solved
     FROM questions q
     LEFT JOIN team_completed_questions tcq ON q.id = tcq.question_id AND tcq.team_id = ?
-    ORDER BY q.id
+    ORDER BY q.points ASC
     `
 
 	rows, err := us.UserStore.DB.Query(query, userID)

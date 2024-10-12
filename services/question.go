@@ -126,7 +126,7 @@ func (us *UserService) CreateQuestion(q Question, images []string, videos []stri
 // Function to retrieve all questions
 func (us *UserService) GetAllQuestions() ([]Question, error) {
 
-	query := `SELECT id, title, points FROM questions`
+	query := `SELECT id, title, points FROM questions ORDER BY points ASC`
 	questions := make([]Question, 0)
 
 	stmt, err := us.UserStore.DB.Prepare(query)
