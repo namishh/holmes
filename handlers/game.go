@@ -81,20 +81,19 @@ func (ah *AuthHandler) UnlockHint(c echo.Context) error {
 
 	user, _ := ah.UserServices.CheckUsername(c.Get(user_name_key).(string))
 
-	if user.Points < worth {
-		quizview := hunt.OutOfPoints()
-		c.Set("ISERROR", true)
-		fromProtected, _ := c.Get("FROMPROTECTED").(bool)
-		return renderView(c, hunt.OutOfPointsIndex(
-			"Hint",
-			c.Get(user_name_key).(string),
-			fromProtected,
-			c.Get("ISERROR").(bool),
-			quizview,
-		))
-	}
-
 	if !hastaken {
+		if user.Points < worth {
+			quizview := hunt.OutOfPoints()
+			c.Set("ISERROR", true)
+			fromProtected, _ := c.Get("FROMPROTECTED").(bool)
+			return renderView(c, hunt.OutOfPointsIndex(
+				"Hint",
+				c.Get(user_name_key).(string),
+				fromProtected,
+				c.Get("ISERROR").(bool),
+				quizview,
+			))
+		}
 		err := ah.UserServices.UnlockHintForTeam(c.Get(user_id_key).(int), id, worth)
 		if err != nil {
 			return err
