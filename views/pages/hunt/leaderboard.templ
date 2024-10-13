@@ -36,7 +36,7 @@ templ Leaderboard(fromProtected bool, users []services.LeaderBoardUser, user ser
 				<tbody>
 					for i, user := range users {
 						if i % 2 == 0 {
-							<tr class="bg-white border-b dark:bg-neutral-900 dark:border-neutral-800">
+							<tr class="border-b bg-neutral-900 border-neutral-800">
 								<th scope="col" class="px-6 text-md py-4 font-medium  whitespace-nowrap text-white">
 									{ user.Username }
 								</th>
@@ -48,7 +48,7 @@ templ Leaderboard(fromProtected bool, users []services.LeaderBoardUser, user ser
 								</td>
 							</tr>
 						} else {
-							<tr class="border-b bg-neutral-900/50 dark:border-neutral-800">
+							<tr class="border-b border-neutral-800">
 								<th scope="col" class="px-6 text-md py-4 font-medium  whitespace-nowrap text-white">
 									{ user.Username }
 								</th>
